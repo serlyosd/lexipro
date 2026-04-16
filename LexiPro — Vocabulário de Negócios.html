@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/Serlyo.doliveira/Downloads/index_3.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexiPro — Vocabulário de Negócios</title>
+<link href="./LexiPro — Vocabulário de Negócios_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f0e;
+    --surface: #161918;
+    --surface2: #1e2221;
+    --border: #2a2f2e;
+    --text: #e8ede9;
+    --text-muted: #6b7876;
+    --text-dim: #9aa8a5;
+    --green: #4ade80;
+    --green-dim: #166534;
+    --yellow: #fbbf24;
+    --yellow-dim: #78350f;
+    --red: #f87171;
+    --red-dim: #7f1d1d;
+    --accent: #5eead4;
+    --accent-dim: #0f4a43;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .logo span { color: var(--text-muted); font-style: italic; font-size: 0.9rem; margin-left: 0.5rem; }
+
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .stat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .stat-pill strong { color: var(--text); font-size: 0.85rem; }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; width: 100%; max-width: 560px; }
+  .screen.active { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+
+  /* ── SETUP SCREEN ── */
+  .setup-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+  }
+
+  .setup-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .setup-sub {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .lang-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .lang-btn {
+    padding: 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface2);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .lang-btn:hover { border-color: var(--accent); color: var(--text); }
+  .lang-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .upload-area {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .upload-area:hover, .upload-area.dragover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .upload-text { color: var(--text-muted); font-size: 0.875rem; }
+  .upload-text strong { color: var(--accent); }
+  .upload-name { margin-top: 0.75rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--green); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    color: #0a1a18;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .demo-link {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .demo-link:hover { color: var(--accent); }
+
+  /* ── STUDY SCREEN ── */
+  .progress-bar-wrap {
+    width: 100%;
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .session-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── CARD ── */
+  .card-wrapper {
+    width: 100%;
+    perspective: 1000px;
+  }
+
+  .card {
+    width: 100%;
+    min-height: 260px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.2s;
+    user-select: none;
+  }
+  .card:hover { box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(0,0,0,0.4); }
+  .card:active { transform: scale(0.99); }
+
+  .card-category {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .card-lang-badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .card-word {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-hint {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Answer side */
+  .card-answer { display: none; width: 100%; }
+  .card-answer.visible { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+
+  .card-translation {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+
+  .card-phonetic {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--yellow);
+    background: var(--yellow-dim);
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── RATING BUTTONS ── */
+  .rating-row {
+    display: none;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .rating-row.visible { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+
+  .rating-btn {
+    padding: 0.9rem 0.5rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .rating-btn .days {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+
+  .btn-hard {
+    background: var(--red-dim);
+    color: var(--red);
+    border: 1px solid #7f1d1d;
+  }
+  .btn-hard:hover { background: #991b1b; }
+
+  .btn-ok {
+    background: var(--yellow-dim);
+    color: var(--yellow);
+    border: 1px solid #92400e;
+  }
+  .btn-ok:hover { background: #92400e; }
+
+  .btn-easy {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid #14532d;
+  }
+  .btn-easy:hover { background: #15803d; }
+
+  /* ── DONE / EMPTY SCREEN ── */
+  .done-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    width: 100%;
+  }
+  .done-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .done-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .done-sub { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+  .done-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .done-stat {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1rem 0.5rem;
+  }
+  .done-stat .val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    display: block;
+  }
+  .done-stat .lbl { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .done-stat.green .val { color: var(--green); }
+  .done-stat.yellow .val { color: var(--yellow); }
+  .done-stat.red .val { color: var(--red); }
+
+  .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+    margin-top: 0.5rem;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── SWIPE HINT ── */
+  .swipe-hint {
+    display: none;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .swipe-hint span { display: flex; align-items: center; gap: 0.3rem; }
+
+  /* ── MOBILE FIRST ── */
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+
+    header {
+      padding: 0.85rem 1rem;
+    }
+    .logo { font-size: 1.25rem; }
+    .logo span { display: none; }
+    .stat-pill { font-size: 0.72rem; }
+    .stat-pill strong { font-size: 0.8rem; }
+    .header-stats { gap: 1rem; }
+
+    main {
+      padding: 1rem 0.85rem;
+      justify-content: flex-start;
+      padding-top: 1.25rem;
+    }
+
+    .screen.active { gap: 1rem; }
+
+    /* Setup */
+    .setup-card { padding: 1.5rem; border-radius: 14px; }
+    .setup-title { font-size: 1.6rem; }
+    .setup-sub { font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .lang-btn { padding: 0.95rem 0.5rem; font-size: 0.85rem; }
+    .upload-area { padding: 1.5rem 1rem; }
+    .btn-primary { padding: 1.1rem; font-size: 1rem; border-radius: 12px; }
+
+    /* Card */
+    .card {
+      min-height: 300px;
+      padding: 2rem 1.5rem;
+      border-radius: 18px;
+      touch-action: pan-y;
+    }
+    .card-word { font-size: 2.2rem; }
+    .card-translation { font-size: 1.5rem; }
+    .card-phonetic { font-size: 0.95rem; padding: 0.4rem 1rem; }
+    .card-hint { font-size: 0.9rem; }
+
+    /* Rating buttons — big touch targets */
+    .rating-row.visible {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.6rem;
+    }
+    .rating-btn {
+      padding: 1.1rem 0.4rem;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      min-height: 70px;
+    }
+    .rating-btn .days { font-size: 0.72rem; }
+
+    /* Swipe hint visible on mobile after reveal */
+    .swipe-hint { display: flex; }
+
+    /* Done screen */
+    .done-card { padding: 2rem 1.5rem; border-radius: 18px; }
+    .done-title { font-size: 1.5rem; }
+    .done-stat .val { font-size: 1.6rem; }
+    .done-stats { gap: 0.75rem; }
+
+    .btn-secondary {
+      width: 100%;
+      text-align: center;
+      padding: 0.9rem;
+    }
+
+    /* Progress info */
+    .session-info { font-size: 0.75rem; }
+  }
+
+  /* Landscape mobile */
+  @media (max-width: 600px) and (orientation: landscape) {
+    .card { min-height: 200px; }
+    main { padding-top: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">LexiPro <span>negócios</span></div>
+  <div class="header-stats">
+    <div class="stat-pill">📚 <strong id="hdr-total">0</strong> cards</div>
+    <div class="stat-pill">🔥 <strong id="hdr-due">0</strong> p/ revisar</div>
+    <div id="auth-bar" style="display:flex;align-items:center;gap:0.5rem"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ SETUP ══ -->
+  <div class="screen active" id="screen-setup">
+    <div class="setup-card">
+      <div class="setup-title">Comece a estudar<br>vocabulário de negócios.</div>
+      <div class="setup-sub">Carregue seu CSV e o sistema agenda automaticamente cada revisão pelo método de repetição espaçada.</div>
+
+      <label class="field-label">Idioma do deck</label>
+      <div class="lang-toggle">
+        <button class="lang-btn selected" onclick="selectLang(&#39;en-pt&#39;, this)">🇺🇸 Inglês → Português</button>
+        <button class="lang-btn" onclick="selectLang(&#39;es-en&#39;, this)">🇪🇸 Espanhol → Inglês</button>
+      </div>
+
+      <label class="field-label">Arquivo CSV (separado por ponto-e-vírgula)</label>
+      <div class="upload-area" id="upload-area">
+        <input type="file" accept=".csv" id="csv-input" onchange="handleFile(this)">
+        <div class="upload-icon">📂</div>
+        <div class="upload-text">Arraste o CSV ou <strong>clique para selecionar</strong></div>
+        <div class="upload-name" id="file-name"></div>
+      </div>
+
+      <button class="btn-primary" id="btn-start" onclick="startSession()" disabled="">
+        Iniciar sessão →
+      </button>
+    </div>
+    <div class="demo-link" onclick="loadDemo()">Carregar 10 cards de demonstração</div>
+  </div>
+
+  <!-- ══ STUDY ══ -->
+  <div class="screen" id="screen-study">
+    <div class="session-info">
+      <span id="sess-progress">0 / 0</span>
+      <span id="sess-new">🆕 0 novos</span>
+    </div>
+    <div class="progress-bar-wrap" style="width:100%">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <div class="card-wrapper">
+      <div class="card" id="study-card" onclick="revealCard()">
+        <div class="card-category" id="card-cat"></div>
+        <div class="card-lang-badge" id="card-badge"></div>
+        <div class="card-word" id="card-front"></div>
+        <div class="card-hint" id="card-hint">toque para revelar</div>
+        <div class="card-answer" id="card-answer">
+          <div class="card-translation" id="card-back"></div>
+          <div class="card-phonetic" id="card-phonetic"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rating-row" id="rating-row">
+      <button class="rating-btn btn-hard" onclick="rate(0)">
+        😓 Difícil
+        <span class="days" id="days-hard">+10 min</span>
+      </button>
+      <button class="rating-btn btn-ok" onclick="rate(1)">
+        🤔 Lembrei
+        <span class="days" id="days-ok">+1 dia</span>
+      </button>
+      <button class="rating-btn btn-easy" onclick="rate(2)">
+        ✅ Fácil
+        <span class="days" id="days-easy">+4 dias</span>
+      </button>
+    </div>
+
+    <div class="swipe-hint" id="swipe-hint" style="display:none">
+      <span>👈 Difícil</span>
+      <span>Fácil 👉</span>
+    </div>
+
+    <button class="btn-secondary" onclick="goSetup()">← Trocar deck</button>
+  </div>
+
+  <!-- ══ DONE ══ -->
+  <div class="screen" id="screen-done">
+    <div class="done-card">
+      <div class="done-icon">🎯</div>
+      <div class="done-title">Sessão concluída!</div>
+      <div class="done-sub">Ótimo trabalho. O sistema agendou sua próxima revisão automaticamente.</div>
+      <div class="done-stats">
+        <div class="done-stat green">
+          <span class="val" id="done-easy">0</span>
+          <span class="lbl">Fácil</span>
+        </div>
+        <div class="done-stat yellow">
+          <span class="val" id="done-ok">0</span>
+          <span class="lbl">Lembrei</span>
+        </div>
+        <div class="done-stat red">
+          <span class="val" id="done-hard">0</span>
+          <span class="lbl">Difícil</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="startSession()">Revisar novamente →</button>
+      <button class="btn-secondary" onclick="goSetup()">Trocar deck</button>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAWpzU4vlkx1_4dAoq9yHxdtochV9DVdaw",
+  authDomain: "lexipro-6b7ab.firebaseapp.com",
+  databaseURL: "https://lexipro-6b7ab-default-rtdb.firebaseio.com",
+  projectId: "lexipro-6b7ab",
+  storageBucket: "lexipro-6b7ab.firebasestorage.app",
+  messagingSenderId: "741676550495",
+  appId: "1:741676550495:web:b750716de30d395ecf4eea"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getDatabase(fbApp);
+
+let currentUser = null;
+let srsCache = {};
+
+function renderAuthUI(user) {
+  const bar = document.getElementById('auth-bar');
+  if (user) {
+    bar.innerHTML = `<img src="${user.photoURL}" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--border)">
+      <span style="font-size:0.75rem;color:var(--text-muted)">${user.displayName?.split(' ')[0]}</span>
+      <button id="btn-signout" style="font-size:0.7rem;padding:0.25rem 0.55rem;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text-muted);cursor:pointer">Sair</button>`;
+    document.getElementById('btn-signout').onclick = () => signOut(auth);
+  } else {
+    bar.innerHTML = `<button id="btn-signin" style="font-size:0.75rem;padding:0.3rem 0.7rem;border:1px solid var(--accent);border-radius:7px;background:transparent;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif">☁ Sync</button>`;
+    document.getElementById('btn-signin').onclick = async () => {
+      try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+      catch(e) { toast('Erro ao entrar com Google'); }
+    };
+  }
+}
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  renderAuthUI(user);
+  if (user) {
+    try {
+      const snap = await get(child(ref(db), `users/${user.uid}/srs`));
+      if (snap.exists()) {
+        srsCache = snap.val();
+        // Merge remote into localStorage
+        Object.entries(srsCache).forEach(([k, v]) => {
+          localStorage.setItem('lp_' + k, JSON.stringify(v));
+        });
+      }
+    } catch(e) { console.warn('Firebase read:', e); }
+    updateHeaderStats();
+  }
+});
+
+async function saveSRSRemote(id, data) {
+  if (!currentUser) return;
+  const safeId = id.replace(/[.#$\[\]]/g, '_');
+  try { await set(ref(db, `users/${currentUser.uid}/srs/${safeId}`), data); }
+  catch(e) { console.warn('Firebase write:', e); }
+}
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let allCards = [];
+let sessionQueue = [];
+let currentCard = null;
+let sessionIdx = 0;
+let revealed = false;
+let lang = 'en-pt';
+let sessionStats = { easy: 0, ok: 0, hard: 0 };
+
+// ══════════════════════════════════════════
+//  SRS — SM-2 simplified
+// ══════════════════════════════════════════
+function getSRSData(id) {
+  const raw = localStorage.getItem('lp_' + id);
+  if (!raw) return { interval: 0, ef: 2.5, due: 0, reps: 0 };
+  return JSON.parse(raw);
+}
+
+function saveSRS(id, data) {
+  localStorage.setItem('lp_' + id, JSON.stringify(data));
+  saveSRSRemote(id, data); // sync to Firebase if logged in
+}
+
+function updateSRS(id, q) {
+  // q: 0=hard, 1=ok, 2=easy
+  let d = getSRSData(id);
+  const now = Date.now();
+
+  if (q === 0) {
+    d.interval = 0; // repeat in 10 min
+    d.due = now + 10 * 60 * 1000;
+    d.reps = 0;
+  } else {
+    d.ef = Math.max(1.3, d.ef + (0.1 - (2 - q) * (0.08 + (2 - q) * 0.02)));
+    if (d.reps === 0) d.interval = 1;
+    else if (d.reps === 1) d.interval = 4;
+    else d.interval = Math.round(d.interval * d.ef);
+    d.due = now + d.interval * 24 * 60 * 60 * 1000;
+    d.reps += 1;
+  }
+  saveSRS(id, d);
+  return d;
+}
+
+function isDue(id) {
+  const d = getSRSData(id);
+  return d.due <= Date.now();
+}
+
+function getNextInterval(id, q) {
+  const d = getSRSData(id);
+  if (q === 0) return '10 min';
+  const ef = Math.max(1.3, d.ef + (0.1 - (2 - q) * (0.08 + (2 - q) * 0.02)));
+  let interval;
+  if (d.reps === 0) interval = 1;
+  else if (d.reps === 1) interval = 4;
+  else interval = Math.round(d.interval * ef);
+  return interval === 1 ? '1 dia' : `${interval} dias`;
+}
+
+// ══════════════════════════════════════════
+//  CSV PARSING
+// ══════════════════════════════════════════
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const cards = [];
+
+  // Detect header — skip lines that look like headers
+  let start = 0;
+  const first = lines[0].toLowerCase();
+  if (first.includes('english') || first.includes('id') || first.includes('vocab') || first.includes('español')) {
+    start = 1;
+    // If line 0 is a title and line 1 is actual header
+    const second = lines[1] ? lines[1].toLowerCase() : '';
+    if (second.includes('english') || second.includes('id')) start = 2;
+  }
+
+  for (let i = start; i < lines.length; i++) {
+    const cols = lines[i].split(';').map(c => c.trim().replace(/^"|"$/g, ''));
+    if (cols.length < 3) continue;
+
+    // Try to detect column layout
+    // EN-PT: ID | English | Português | Categoria | Fonética
+    // ES-EN: ID | Español | English | Categoria | Fonética (or similar)
+    let id, front, back, category, phonetic;
+
+    // If first col is numeric = has ID column
+    if (!isNaN(cols[0]) && cols[0] !== '') {
+      id = cols[0];
+      front = cols[1] || '';
+      back = cols[2] || '';
+      category = cols[3] || '';
+      phonetic = cols[4] || '';
+    } else {
+      id = i.toString();
+      front = cols[0] || '';
+      back = cols[1] || '';
+      category = cols[2] || '';
+      phonetic = cols[3] || '';
+    }
+
+    if (!front || !back) continue;
+
+    cards.push({
+      id: `${lang}_${id}`,
+      front: front.trim(),
+      back: back.trim(),
+      category: category.trim(),
+      phonetic: phonetic.trim(),
+    });
+  }
+  return cards;
+}
+
+// ══════════════════════════════════════════
+//  FILE HANDLING
+// ══════════════════════════════════════════
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('file-name').textContent = '✓ ' + file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    allCards = parseCSV(e.target.result);
+    updateHeaderStats();
+    document.getElementById('btn-start').disabled = allCards.length === 0;
+    if (allCards.length === 0) toast('Nenhum card encontrado. Verifique o CSV.');
+    else toast(`${allCards.length} cards carregados!`);
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+// ══════════════════════════════════════════
+//  DEMO DATA
+// ══════════════════════════════════════════
+function loadDemo() {
+  const demo = [
+    { id:'demo_1', front:'cash flow', back:'fluxo de caixa', category:'Finanças', phonetic:'kash flo' },
+    { id:'demo_2', front:'budget', back:'orçamento', category:'Finanças', phonetic:'BAJ-et' },
+    { id:'demo_3', front:'accounts payable', back:'contas a pagar', category:'Contábil', phonetic:'a-KAUNTS PEY-a-bl' },
+    { id:'demo_4', front:'revenue', back:'receita', category:'Finanças', phonetic:'REV-e-nyu' },
+    { id:'demo_5', front:'ebitda', back:'LAJIDA', category:'Finanças', phonetic:'ee-bee-ai-tee-dee-ey' },
+    { id:'demo_6', front:'stakeholder', back:'parte interessada', category:'Gestão', phonetic:'STEYK-hol-der' },
+    { id:'demo_7', front:'milestone', back:'marco / etapa', category:'Gestão', phonetic:'MAIL-ston' },
+    { id:'demo_8', front:'procurement', back:'aquisição / compras', category:'Compras', phonetic:'pro-KYUR-ment' },
+    { id:'demo_9', front:'withholding tax', back:'imposto retido na fonte', category:'Fiscal', phonetic:'with-HOL-ding taks' },
+    { id:'demo_10', front:'reconciliation', back:'conciliação', category:'Contábil', phonetic:'rek-on-sil-i-EY-shon' },
+  ];
+  allCards = demo;
+  document.getElementById('file-name').textContent = '✓ demo (10 cards)';
+  document.getElementById('btn-start').disabled = false;
+  updateHeaderStats();
+  toast('10 cards de demonstração carregados!');
+}
+
+// ══════════════════════════════════════════
+//  SESSION
+// ══════════════════════════════════════════
+function buildQueue() {
+  const due = allCards.filter(c => isDue(c.id));
+  // Mix new cards (never reviewed) and due cards
+  const newCards = due.filter(c => getSRSData(c.id).reps === 0);
+  const review = due.filter(c => getSRSData(c.id).reps > 0);
+  // Shuffle
+  shuffle(newCards); shuffle(review);
+  // Session limit: 20 cards max
+  return [...review, ...newCards].slice(0, 20);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function startSession() {
+  sessionStats = { easy: 0, ok: 0, hard: 0 };
+  sessionQueue = buildQueue();
+  sessionIdx = 0;
+
+  if (sessionQueue.length === 0) {
+    // Show next due time
+    const nextDue = allCards
+      .map(c => getSRSData(c.id).due)
+      .filter(d => d > Date.now())
+      .sort()[0];
+    const mins = nextDue ? Math.round((nextDue - Date.now()) / 60000) : null;
+    document.getElementById('done-easy').textContent = '🎉';
+    document.getElementById('done-ok').textContent = '';
+    document.getElementById('done-hard').textContent = '';
+    document.querySelector('.done-title').textContent = 'Tudo em dia!';
+    document.querySelector('.done-sub').textContent = mins
+      ? `Próxima revisão em ${mins < 60 ? mins + ' min' : Math.round(mins/60) + ' h'}.`
+      : 'Carregue um CSV para começar.';
+    showScreen('done');
+    return;
+  }
+
+  showScreen('study');
+  showCard();
+}
+
+function showCard() {
+  if (sessionIdx >= sessionQueue.length) {
+    endSession();
+    return;
+  }
+
+  currentCard = sessionQueue[sessionIdx];
+  revealed = false;
+
+  const srs = getSRSData(currentCard.id);
+  const isNew = srs.reps === 0;
+
+  document.getElementById('card-front').textContent = currentCard.front;
+  document.getElementById('card-back').textContent = currentCard.back;
+  document.getElementById('card-phonetic').textContent = currentCard.phonetic || '';
+  document.getElementById('card-cat').textContent = currentCard.category;
+  document.getElementById('card-badge').textContent = lang === 'en-pt' ? 'EN → PT' : 'ES → EN';
+  document.getElementById('card-hint').style.display = '';
+  document.getElementById('card-answer').classList.remove('visible');
+  document.getElementById('rating-row').classList.remove('visible');
+  const hint = document.getElementById('swipe-hint');
+  if (hint) hint.style.display = 'none';
+
+  // Progress
+  const pct = (sessionIdx / sessionQueue.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('sess-progress').textContent = `${sessionIdx} / ${sessionQueue.length}`;
+  const newCount = sessionQueue.filter(c => getSRSData(c.id).reps === 0).length;
+  document.getElementById('sess-new').textContent = `🆕 ${newCount} novos`;
+
+  // Interval previews
+  document.getElementById('days-hard').textContent = getNextInterval(currentCard.id, 0);
+  document.getElementById('days-ok').textContent = getNextInterval(currentCard.id, 1);
+  document.getElementById('days-easy').textContent = getNextInterval(currentCard.id, 2);
+}
+
+function revealCard() {
+  if (revealed) return;
+  revealed = true;
+  document.getElementById('card-hint').style.display = 'none';
+  document.getElementById('card-answer').classList.add('visible');
+  document.getElementById('rating-row').classList.add('visible');
+  // Show swipe hint on mobile
+  const hint = document.getElementById('swipe-hint');
+  if (hint && window.innerWidth <= 600) hint.style.display = 'flex';
+}
+
+function rate(q) {
+  if (!revealed) return;
+  updateSRS(currentCard.id, q);
+  if (q === 2) sessionStats.easy++;
+  else if (q === 1) sessionStats.ok++;
+  else sessionStats.hard++;
+
+  // If hard, re-add to queue
+  if (q === 0) sessionQueue.push(currentCard);
+
+  sessionIdx++;
+  showCard();
+}
+
+function endSession() {
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('done-easy').textContent = sessionStats.easy;
+  document.getElementById('done-ok').textContent = sessionStats.ok;
+  document.getElementById('done-hard').textContent = sessionStats.hard;
+  document.querySelector('.done-title').textContent = 'Sessão concluída!';
+  document.querySelector('.done-sub').textContent = 'Ótimo trabalho. O sistema agendou sua próxima revisão automaticamente.';
+  updateHeaderStats();
+  showScreen('done');
+}
+
+// ══════════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════════
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+}
+
+function goSetup() { showScreen('setup'); }
+
+function selectLang(l, btn) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function updateHeaderStats() {
+  document.getElementById('hdr-total').textContent = allCards.length;
+  const due = allCards.filter(c => isDue(c.id)).length;
+  document.getElementById('hdr-due').textContent = due;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// Expose functions globally for HTML onclick handlers
+window.selectLang = selectLang;
+window.handleFile = handleFile;
+window.startSession = startSession;
+window.loadDemo = loadDemo;
+window.revealCard = revealCard;
+window.rate = rate;
+window.goSetup = goSetup;
+
+// Drag & drop
+const ua = document.getElementById('upload-area');
+ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
+ua.addEventListener('dragleave', () => ua.classList.remove('dragover'));
+ua.addEventListener('drop', e => {
+  e.preventDefault();
+  ua.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) {
+    document.getElementById('file-name').textContent = '✓ ' + file.name;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      allCards = parseCSV(ev.target.result);
+      updateHeaderStats();
+      document.getElementById('btn-start').disabled = allCards.length === 0;
+      toast(`${allCards.length} cards carregados!`);
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+});
+
+// ══════════════════════════════════════════
+//  SWIPE GESTURE
+// ══════════════════════════════════════════
+let touchStartX = 0;
+let isDragging = false;
+const cardEl = document.getElementById('study-card');
+
+cardEl.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  isDragging = false;
+}, { passive: true });
+
+cardEl.addEventListener('touchmove', e => {
+  if (!revealed) return;
+  const dx = e.touches[0].clientX - touchStartX;
+  const dy = e.touches[0].clientY - (e.touches[0].clientY); // unused
+  isDragging = true;
+  const clamp = Math.max(-130, Math.min(130, dx));
+  cardEl.style.transform = `translateX(${clamp}px) rotate(${clamp * 0.07}deg)`;
+  cardEl.style.boxShadow = dx > 40
+    ? '0 0 0 2px var(--green)'
+    : dx < -40 ? '0 0 0 2px var(--red)' : '';
+}, { passive: true });
+
+cardEl.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  cardEl.style.transform = '';
+  cardEl.style.boxShadow = '';
+  if (!revealed || !isDragging) return;
+  if (dx > 80) rate(2);
+  else if (dx < -80) rate(0);
+  isDragging = false;
+}, { passive: true });
+
+// Show swipe hint on reveal (mobile only)
+const _origReveal = revealCard;
+window._revealCard = revealCard;
+
+updateHeaderStats();
+
+  if (document.getElementById('screen-study').classList.contains('active')) {
+    if (e.code === 'Space' && !revealed) { e.preventDefault(); revealCard(); }
+    if (revealed) {
+      if (e.key === '1') rate(0);
+      if (e.key === '2') rate(1);
+      if (e.key === '3') rate(2);
+    }
+  }
+});
+
+updateHeaderStats();
+</script>
+
+
+</body></html>
