@@ -1,883 +1,704 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LexiPro — Vocabulário de Negócios</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>LexiPro — Seu Flashcard Pessoal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0f0e;
-    --surface: #161918;
-    --surface2: #1e2221;
-    --border: #2a2f2e;
-    --text: #e8ede9;
-    --text-muted: #6b7876;
-    --text-dim: #9aa8a5;
-    --green: #4ade80;
-    --green-dim: #166534;
-    --yellow: #fbbf24;
-    --yellow-dim: #78350f;
-    --red: #f87171;
-    --red-dim: #7f1d1d;
-    --accent: #5eead4;
-    --accent-dim: #0f4a43;
-  }
+:root {
+  --bg:#080a09;--bg2:#0e1210;--surface:#131815;--surface2:#1a201c;--surface3:#212820;
+  --border:#252d27;--border2:#2f3a31;--text:#e2ebe3;--text-muted:#5e7262;--text-dim:#8fa893;
+  --green:#5af292;--green-dim:#0e3320;--green-mid:#1a5c35;
+  --yellow:#f5c842;--yellow-dim:#3a2a08;
+  --red:#f07070;--red-dim:#3a1010;
+  --accent:#3dffc0;--accent-dim:#062e22;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* HEADER */
+header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(8,10,9,0.94);backdrop-filter:blur(12px);z-index:100}
+.logo-wrap{display:flex;align-items:baseline;gap:0.5rem}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em}
+.logo-tag{font-size:0.68rem;color:var(--text-muted);font-weight:500;letter-spacing:0.05em;text-transform:uppercase}
+.logo-version{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--text-muted);background:var(--surface2);padding:0.15rem 0.4rem;border-radius:4px;border:1px solid var(--border)}
+.header-right{display:flex;align-items:center;gap:0.85rem}
+.stat-pill{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);display:flex;align-items:center;gap:0.3rem}
+.stat-pill strong{color:var(--text)}
+#auth-bar{display:flex;align-items:center;gap:0.5rem}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+/* MAIN */
+main{flex:1;display:flex;flex-direction:column;align-items:center}
+.screen{display:none;width:100%}
+.screen.active{display:flex;flex-direction:column;align-items:center}
 
-  /* ── HEADER ── */
-  header {
-    padding: 1.25rem 2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 100;
-  }
+/* ══ WELCOME ══ */
+#screen-welcome{min-height:calc(100vh - 57px);justify-content:center;padding:3rem 1.5rem;position:relative;overflow:hidden}
+.welcome-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 60%,rgba(61,255,192,0.05) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(245,200,66,0.04) 0%,transparent 50%);pointer-events:none}
+.welcome-content{max-width:640px;width:100%;position:relative;z-index:1}
+.welcome-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
+.welcome-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
+.welcome-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,3.6rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1.25rem}
+.welcome-title em{font-style:italic;color:var(--accent)}
+.welcome-sub{font-size:0.97rem;color:var(--text-dim);line-height:1.65;margin-bottom:2.25rem;max-width:480px}
+.welcome-features{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:2.25rem}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1rem;transition:border-color 0.2s}
+.feature-card:hover{border-color:var(--border2)}
+.feature-icon{font-size:1.4rem;margin-bottom:0.5rem}
+.feature-title{font-size:0.78rem;font-weight:600;margin-bottom:0.25rem}
+.feature-desc{font-size:0.7rem;color:var(--text-muted);line-height:1.5}
+.welcome-cta{display:flex;gap:0.75rem;flex-wrap:wrap}
 
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    letter-spacing: -0.02em;
-    color: var(--accent);
-  }
-  .logo span { color: var(--text-muted); font-style: italic; font-size: 0.9rem; margin-left: 0.5rem; }
+/* Buttons */
+.btn-primary{padding:0.9rem 2rem;background:var(--accent);color:#050e0b;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:0.5rem}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 24px rgba(61,255,192,0.2)}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-ghost{padding:0.9rem 1.5rem;background:transparent;color:var(--text-dim);border:1px solid var(--border2);border-radius:10px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:500;cursor:pointer;transition:all 0.15s}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-  .header-stats {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-  }
+/* ══ SETUP ══ */
+#screen-setup{padding:2rem 1.5rem;max-width:560px;width:100%;gap:1.1rem;margin:0 auto}
+.setup-header{width:100%;display:flex;align-items:center;gap:1rem}
+.setup-back{width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-dim);transition:all 0.15s;flex-shrink:0}
+.setup-back:hover{border-color:var(--border2);color:var(--text)}
+.setup-heading{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700}
+.setup-card{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.75rem}
+.field-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.6rem;display:block}
 
-  .stat-pill {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .stat-pill strong { color: var(--text); font-size: 0.85rem; }
+/* Deck list */
+.deck-list{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.25rem}
+.deck-item{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.15s;gap:0.75rem}
+.deck-item:hover{border-color:var(--border2)}
+.deck-item.selected{border-color:var(--accent);background:var(--accent-dim)}
+.deck-item-left{display:flex;align-items:center;gap:0.75rem;flex:1;min-width:0}
+.deck-flag{font-size:1.2rem;flex-shrink:0}
+.deck-info{min-width:0}
+.deck-name{font-size:0.86rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-meta{font-size:0.68rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.deck-item-right{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
+.deck-check{color:var(--accent);font-size:0.9rem;display:none}
+.deck-item.selected .deck-check{display:block}
+.deck-remove{width:24px;height:24px;background:transparent;border:1px solid var(--border);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--text-muted);transition:all 0.15s}
+.deck-remove:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
 
-  /* ── MAIN ── */
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
-  }
+/* Upload */
+.upload-area{border:2px dashed var(--border2);border-radius:12px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:1.25rem;position:relative;background:var(--surface2)}
+.upload-area:hover,.upload-area.dragover{border-color:var(--accent);background:var(--accent-dim)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.upload-icon{font-size:1.6rem;margin-bottom:0.4rem}
+.upload-text{color:var(--text-muted);font-size:0.8rem;line-height:1.5}
+.upload-text strong{color:var(--accent)}
+.upload-name{margin-top:0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green)}
 
-  /* ── SCREENS ── */
-  .screen { display: none; width: 100%; max-width: 560px; }
-  .screen.active { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+/* Lang direction */
+.lang-direction{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1.25rem}
+.lang-btn{padding:0.75rem 0.5rem;border:1px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text-dim);cursor:pointer;font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:500;transition:all 0.15s;text-align:center}
+.lang-btn:hover{border-color:var(--border2);color:var(--text)}
+.lang-btn.selected{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
 
-  /* ── SETUP SCREEN ── */
-  .setup-card {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.5rem;
-  }
+/* ══ STUDY ══ */
+#screen-study{padding:1.25rem 1rem 1.5rem;max-width:560px;width:100%;margin:0 auto;gap:1rem}
+.progress-wrap{width:100%}
+.progress-top{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem}
+.progress-bar-bg{width:100%;height:2px;background:var(--surface3);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:99px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
 
-  .setup-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2rem;
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
-  }
-  .setup-sub {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
-    line-height: 1.5;
-  }
+/* Card */
+.card{width:100%;min-height:280px;background:var(--surface);border:1px solid var(--border);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 2rem;text-align:center;cursor:pointer;position:relative;transition:box-shadow 0.2s;user-select:none;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(61,255,192,0.04) 0%,transparent 60%);pointer-events:none}
+.card:active{transform:scale(0.99)}
+.card-meta{position:absolute;top:1.1rem;left:0;right:0;padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.card-category{font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.card-badge{font-size:0.58rem;padding:0.15rem 0.45rem;border-radius:99px;border:1px solid var(--border2);color:var(--text-muted);font-family:'JetBrains Mono',monospace}
 
-  .field-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.5rem;
-    display: block;
-  }
+/* Front */
+.card-front-content{display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+.card-word{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:900;line-height:1.15;letter-spacing:-0.02em}
+.card-hint{font-size:0.76rem;color:var(--text-muted)}
+@keyframes breathe{0%,100%{opacity:0.5}50%{opacity:1}}
+.card-hint{animation:breathe 2.5s ease-in-out infinite}
 
-  .lang-toggle {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
+/* Back */
+.card-back-content{display:none;flex-direction:column;align-items:center;gap:0.75rem;width:100%}
+.card-back-content.visible{display:flex}
+.card-original{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--text-muted);letter-spacing:-0.01em}
+.card-divider{width:40px;height:1px;background:var(--border2)}
+.card-translation{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4.5vw,2.2rem);font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1.2}
+.card-phonetic{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(245,200,66,0.2);padding:0.3rem 0.8rem;border-radius:6px;letter-spacing:0.04em}
 
-  .lang-btn {
-    padding: 0.85rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface2);
-    color: var(--text-dim);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.15s;
-    text-align: center;
-  }
-  .lang-btn:hover { border-color: var(--accent); color: var(--text); }
-  .lang-btn.selected {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-    color: var(--accent);
-  }
+/* Rating */
+.rating-row{display:none;width:100%;gap:0.6rem}
+.rating-row.visible{display:grid;grid-template-columns:1fr 1fr 1fr}
+.rating-btn{padding:1rem 0.5rem;border:none;border-radius:12px;cursor:pointer;font-family:'Syne',sans-serif;font-size:0.83rem;font-weight:700;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:0.3rem}
+.rating-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.rating-btn .days{font-family:'JetBrains Mono',monospace;font-size:0.63rem;opacity:0.75;font-weight:400}
+.btn-hard{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,112,112,0.2)}
+.btn-ok{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(245,200,66,0.2)}
+.btn-easy{background:var(--green-dim);color:var(--green);border:1px solid rgba(90,242,146,0.2)}
 
-  .upload-area {
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    padding: 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 1.5rem;
-    position: relative;
-  }
-  .upload-area:hover, .upload-area.dragover {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-  }
-  .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-  .upload-text { color: var(--text-muted); font-size: 0.875rem; }
-  .upload-text strong { color: var(--accent); }
-  .upload-name { margin-top: 0.75rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--green); }
+.swipe-hint{display:none;width:100%;justify-content:space-between;font-size:0.66rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;padding:0 0.25rem}
+.study-footer{width:100%;display:flex;justify-content:center}
+.btn-text{padding:0.6rem 1rem;background:transparent;border:none;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:0.78rem;cursor:pointer;transition:color 0.15s}
+.btn-text:hover{color:var(--text)}
 
-  .btn-primary {
-    width: 100%;
-    padding: 1rem;
-    background: var(--accent);
-    color: #0a1a18;
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.01em;
-  }
-  .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+/* ══ DONE ══ */
+#screen-done{padding:2rem 1.5rem;max-width:480px;width:100%;margin:0 auto;justify-content:center;min-height:calc(100vh - 57px)}
+.done-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;text-align:center;width:100%}
+.done-icon{font-size:2.5rem;margin-bottom:1rem}
+.done-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.done-sub{color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:1.5rem}
+.done-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.75rem}
+.done-stat{background:var(--surface2);border-radius:12px;padding:1rem 0.5rem;border:1px solid var(--border)}
+.done-stat .val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;display:block;line-height:1;margin-bottom:0.35rem}
+.done-stat .lbl{font-size:0.63rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.done-stat.green .val{color:var(--green)}
+.done-stat.yellow .val{color:var(--yellow)}
+.done-stat.red .val{color:var(--red)}
+.done-actions{display:flex;flex-direction:column;gap:0.5rem}
 
-  .demo-link {
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .demo-link:hover { color: var(--accent); }
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1rem 1.5rem;text-align:center}
+.footer-credit{font-size:0.62rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;line-height:1.6}
+.footer-credit span{color:var(--accent)}
 
-  /* ── STUDY SCREEN ── */
-  .progress-bar-wrap {
-    width: 100%;
-    height: 3px;
-    background: var(--surface2);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 99px;
-    transition: width 0.4s ease;
-  }
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:0.6rem 1rem;font-size:0.78rem;color:var(--text-dim);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:999;white-space:nowrap;font-family:'JetBrains Mono',monospace}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-  .session-info {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* ── CARD ── */
-  .card-wrapper {
-    width: 100%;
-    perspective: 1000px;
-  }
-
-  .card {
-    width: 100%;
-    min-height: 260px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.1s, box-shadow 0.2s;
-    user-select: none;
-  }
-  .card:hover { box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(0,0,0,0.4); }
-  .card:active { transform: scale(0.99); }
-
-  .card-category {
-    position: absolute;
-    top: 1.25rem;
-    left: 1.5rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .card-lang-badge {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.5rem;
-    font-size: 0.65rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 99px;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .card-word {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.4rem;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
-  }
-
-  .card-hint {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-  }
-
-  /* Answer side */
-  .card-answer { display: none; width: 100%; }
-  .card-answer.visible { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-
-  .card-translation {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: var(--accent);
-    letter-spacing: -0.01em;
-  }
-
-  .card-phonetic {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--yellow);
-    background: var(--yellow-dim);
-    padding: 0.3rem 0.75rem;
-    border-radius: 6px;
-    letter-spacing: 0.03em;
-  }
-
-  /* ── RATING BUTTONS ── */
-  .rating-row {
-    display: none;
-    width: 100%;
-    gap: 0.75rem;
-  }
-  .rating-row.visible { display: grid; grid-template-columns: 1fr 1fr 1fr; }
-
-  .rating-btn {
-    padding: 0.9rem 0.5rem;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.15s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-  }
-  .rating-btn .days {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    opacity: 0.8;
-    font-weight: 400;
-  }
-
-  .btn-hard {
-    background: var(--red-dim);
-    color: var(--red);
-    border: 1px solid #7f1d1d;
-  }
-  .btn-hard:hover { background: #991b1b; }
-
-  .btn-ok {
-    background: var(--yellow-dim);
-    color: var(--yellow);
-    border: 1px solid #92400e;
-  }
-  .btn-ok:hover { background: #92400e; }
-
-  .btn-easy {
-    background: var(--green-dim);
-    color: var(--green);
-    border: 1px solid #14532d;
-  }
-  .btn-easy:hover { background: #15803d; }
-
-  /* ── DONE / EMPTY SCREEN ── */
-  .done-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3rem 2.5rem;
-    text-align: center;
-    width: 100%;
-  }
-  .done-icon { font-size: 3rem; margin-bottom: 1rem; }
-  .done-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-  }
-  .done-sub { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
-  .done-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
-    margin: 1.5rem 0;
-  }
-  .done-stat {
-    background: var(--surface2);
-    border-radius: 10px;
-    padding: 1rem 0.5rem;
-  }
-  .done-stat .val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.8rem;
-    display: block;
-  }
-  .done-stat .lbl { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .done-stat.green .val { color: var(--green); }
-  .done-stat.yellow .val { color: var(--yellow); }
-  .done-stat.red .val { color: var(--red); }
-
-  .btn-secondary {
-    padding: 0.75rem 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: transparent;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    transition: all 0.15s;
-    margin-top: 0.5rem;
-  }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    transition: transform 0.3s ease;
-    z-index: 999;
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  /* Mobile */
-  @media (max-width: 480px) {
-    header { padding: 1rem; }
-    .header-stats { gap: 0.75rem; }
-    .setup-card { padding: 1.75rem; }
-    .card-word { font-size: 1.9rem; }
-  }
+/* MOBILE */
+@media(max-width:600px){
+  header{padding:0.75rem 0.85rem}
+  .logo{font-size:1.2rem}
+  .logo-tag{display:none}
+  #screen-welcome{padding:1.75rem 1rem}
+  .welcome-features{grid-template-columns:1fr;gap:0.5rem}
+  .feature-card{display:flex;align-items:center;gap:1rem;padding:0.9rem}
+  .feature-icon{margin-bottom:0;font-size:1.5rem}
+  .welcome-cta{flex-direction:column}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center}
+  #screen-setup{padding:1.25rem 0.85rem}
+  #screen-study{padding:1rem 0.75rem 1.25rem}
+  .card{min-height:260px;padding:2rem 1.25rem;border-radius:16px;touch-action:pan-y}
+  .card-word{font-size:2rem}
+  .card-translation{font-size:1.75rem}
+  .rating-btn{padding:1.1rem 0.4rem;min-height:68px;border-radius:14px}
+  .swipe-hint{display:flex}
+  .done-card{padding:2rem 1.25rem}
+  footer{padding:0.75rem 1rem}
+}
+@media(max-width:600px) and (orientation:landscape){.card{min-height:180px}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">LexiPro <span>negócios</span></div>
-  <div class="header-stats">
-    <div class="stat-pill">📚 <strong id="hdr-total">0</strong> cards</div>
-    <div class="stat-pill">🔥 <strong id="hdr-due">0</strong> p/ revisar</div>
+  <div class="logo-wrap">
+    <div class="logo">LexiPro</div>
+    <div class="logo-tag">flashcard pessoal</div>
+    <div class="logo-version">v2.0</div>
+  </div>
+  <div class="header-right">
+    <div class="stat-pill">📚 <strong id="hdr-total">0</strong></div>
+    <div class="stat-pill">🔥 <strong id="hdr-due">0</strong></div>
+    <div id="auth-bar"></div>
   </div>
 </header>
 
 <main>
 
-  <!-- ══ SETUP ══ -->
-  <div class="screen active" id="screen-setup">
-    <div class="setup-card">
-      <div class="setup-title">Comece a estudar<br>vocabulário de negócios.</div>
-      <div class="setup-sub">Carregue seu CSV e o sistema agenda automaticamente cada revisão pelo método de repetição espaçada.</div>
-
-      <label class="field-label">Idioma do deck</label>
-      <div class="lang-toggle">
-        <button class="lang-btn selected" onclick="selectLang('en-pt', this)">🇺🇸 Inglês → Português</button>
-        <button class="lang-btn" onclick="selectLang('es-en', this)">🇪🇸 Espanhol → Inglês</button>
+<!-- ══ WELCOME ══ -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-bg"></div>
+  <div class="welcome-content">
+    <div class="welcome-eyebrow">Método de Repetição Espaçada</div>
+    <h1 class="welcome-title">Domine o vocabulário<br>de negócios em <em>inglês</em><br>e <em>espanhol.</em></h1>
+    <p class="welcome-sub">Estude apenas o que você está prestes a esquecer. O LexiPro agenda cada revisão no momento exato para maximizar a retenção com o mínimo de esforço.</p>
+    <div class="welcome-features">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div><div class="feature-title">Repetição Espaçada</div><div class="feature-desc">Algoritmo SM-2 — revisões no momento certo para fixar na memória de longo prazo</div></div>
       </div>
-
-      <label class="field-label">Arquivo CSV (separado por ponto-e-vírgula)</label>
-      <div class="upload-area" id="upload-area">
-        <input type="file" accept=".csv" id="csv-input" onchange="handleFile(this)">
-        <div class="upload-icon">📂</div>
-        <div class="upload-text">Arraste o CSV ou <strong>clique para selecionar</strong></div>
-        <div class="upload-name" id="file-name"></div>
+      <div class="feature-card">
+        <div class="feature-icon">🔊</div>
+        <div><div class="feature-title">Fonética Prática</div><div class="feature-desc">Pronúncia em português para cada termo de negócios</div></div>
       </div>
-
-      <button class="btn-primary" id="btn-start" onclick="startSession()" disabled>
-        Iniciar sessão →
-      </button>
+      <div class="feature-card">
+        <div class="feature-icon">☁️</div>
+        <div><div class="feature-title">Sincronizado</div><div class="feature-desc">Progresso salvo em todos os dispositivos via Google</div></div>
+      </div>
     </div>
-    <div class="demo-link" onclick="loadDemo()">Carregar 10 cards de demonstração</div>
+    <div class="welcome-cta">
+      <button class="btn-primary" onclick="goSetup()">Começar agora →</button>
+      <button class="btn-ghost" onclick="runDemo()">Ver demonstração</button>
+    </div>
   </div>
+</div>
 
-  <!-- ══ STUDY ══ -->
-  <div class="screen" id="screen-study">
-    <div class="session-info">
+<!-- ══ SETUP ══ -->
+<div class="screen" id="screen-setup">
+  <div class="setup-header">
+    <button class="setup-back" onclick="goWelcome()">←</button>
+    <div class="setup-heading">Meus Decks</div>
+  </div>
+  <div class="setup-card">
+    <label class="field-label">Decks carregados</label>
+    <div class="deck-list" id="deck-list">
+      <div style="font-size:0.8rem;color:var(--text-muted);padding:0.25rem 0">Nenhum deck ainda.</div>
+    </div>
+
+    <label class="field-label">Adicionar deck (CSV separado por ;)</label>
+    <label class="field-label" style="margin-top:0.85rem">Idioma do novo deck</label>
+    <div class="lang-direction">
+      <button class="lang-btn selected" onclick="selectLang('en-pt',this)">🇺🇸 Inglês → Português</button>
+      <button class="lang-btn" onclick="selectLang('es-pt',this)">🇪🇸 Espanhol → Português</button>
+    </div>
+
+    <div class="upload-area" id="upload-area">
+      <input type="file" accept=".csv" id="csv-input" onchange="handleFile(this)">
+      <div class="upload-icon">📂</div>
+      <div class="upload-text">Arraste o CSV ou <strong>clique para selecionar</strong><br><span style="font-size:0.68rem;opacity:0.7">Colunas: ID; Termo; Tradução; Categoria; Fonética</span></div>
+      <div class="upload-name" id="file-name"></div>
+    </div>
+
+    <button class="btn-primary" id="btn-start" onclick="startSession()" disabled style="width:100%;justify-content:center">Iniciar sessão →</button>
+  </div>
+</div>
+
+<!-- ══ STUDY ══ -->
+<div class="screen" id="screen-study">
+  <div class="progress-wrap">
+    <div class="progress-top">
       <span id="sess-progress">0 / 0</span>
       <span id="sess-new">🆕 0 novos</span>
     </div>
-    <div class="progress-bar-wrap" style="width:100%">
+    <div class="progress-bar-bg">
       <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
     </div>
-
-    <div class="card-wrapper">
-      <div class="card" id="study-card" onclick="revealCard()">
-        <div class="card-category" id="card-cat"></div>
-        <div class="card-lang-badge" id="card-badge"></div>
-        <div class="card-word" id="card-front"></div>
-        <div class="card-hint" id="card-hint">toque para revelar</div>
-        <div class="card-answer" id="card-answer">
-          <div class="card-translation" id="card-back"></div>
-          <div class="card-phonetic" id="card-phonetic"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rating-row" id="rating-row">
-      <button class="rating-btn btn-hard" onclick="rate(0)">
-        😓 Difícil
-        <span class="days" id="days-hard">+10 min</span>
-      </button>
-      <button class="rating-btn btn-ok" onclick="rate(1)">
-        🤔 Lembrei
-        <span class="days" id="days-ok">+1 dia</span>
-      </button>
-      <button class="rating-btn btn-easy" onclick="rate(2)">
-        ✅ Fácil
-        <span class="days" id="days-easy">+4 dias</span>
-      </button>
-    </div>
-
-    <button class="btn-secondary" onclick="goSetup()">← Trocar deck</button>
   </div>
 
-  <!-- ══ DONE ══ -->
-  <div class="screen" id="screen-done">
-    <div class="done-card">
-      <div class="done-icon">🎯</div>
-      <div class="done-title">Sessão concluída!</div>
-      <div class="done-sub">Ótimo trabalho. O sistema agendou sua próxima revisão automaticamente.</div>
-      <div class="done-stats">
-        <div class="done-stat green">
-          <span class="val" id="done-easy">0</span>
-          <span class="lbl">Fácil</span>
-        </div>
-        <div class="done-stat yellow">
-          <span class="val" id="done-ok">0</span>
-          <span class="lbl">Lembrei</span>
-        </div>
-        <div class="done-stat red">
-          <span class="val" id="done-hard">0</span>
-          <span class="lbl">Difícil</span>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="startSession()">Revisar novamente →</button>
-      <button class="btn-secondary" onclick="goSetup()">Trocar deck</button>
+  <div class="card" id="study-card" onclick="revealCard()">
+    <div class="card-meta">
+      <span class="card-category" id="card-cat"></span>
+      <span class="card-badge" id="card-badge"></span>
+    </div>
+    <div class="card-front-content" id="card-front-wrap">
+      <div class="card-word" id="card-front"></div>
+      <div class="card-hint">toque para revelar</div>
+    </div>
+    <div class="card-back-content" id="card-answer">
+      <div class="card-original" id="card-original"></div>
+      <div class="card-divider"></div>
+      <div class="card-translation" id="card-back"></div>
+      <div class="card-phonetic" id="card-phonetic"></div>
     </div>
   </div>
+
+  <div class="rating-row" id="rating-row">
+    <button class="rating-btn btn-hard" onclick="rate(0)">😓 Difícil<span class="days" id="days-hard">10 min</span></button>
+    <button class="rating-btn btn-ok" onclick="rate(1)">🤔 Lembrei<span class="days" id="days-ok">1 dia</span></button>
+    <button class="rating-btn btn-easy" onclick="rate(2)">✅ Fácil<span class="days" id="days-easy">4 dias</span></button>
+  </div>
+
+  <div class="swipe-hint" id="swipe-hint" style="display:none">
+    <span>👈 Difícil</span><span>Fácil 👉</span>
+  </div>
+
+  <div class="study-footer">
+    <button class="btn-text" onclick="goSetup()">← Trocar deck</button>
+  </div>
+</div>
+
+<!-- ══ DONE ══ -->
+<div class="screen" id="screen-done">
+  <div class="done-card">
+    <div class="done-icon">🎯</div>
+    <div class="done-title" id="done-title">Sessão concluída!</div>
+    <div class="done-sub" id="done-sub">O sistema agendou sua próxima revisão automaticamente.</div>
+    <div class="done-stats">
+      <div class="done-stat green"><span class="val" id="done-easy">0</span><span class="lbl">Fácil</span></div>
+      <div class="done-stat yellow"><span class="val" id="done-ok">0</span><span class="lbl">Lembrei</span></div>
+      <div class="done-stat red"><span class="val" id="done-hard">0</span><span class="lbl">Difícil</span></div>
+    </div>
+    <div class="done-actions">
+      <button class="btn-primary" onclick="startSession()" style="width:100%;justify-content:center">Revisar novamente →</button>
+      <button class="btn-ghost" onclick="goSetup()" style="width:100%">← Trocar deck</button>
+    </div>
+  </div>
+</div>
 
 </main>
 
+<footer>
+  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v2.0</div>
+</footer>
+
 <div class="toast" id="toast"></div>
 
-<script>
-// ══════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════
-let allCards = [];
-let sessionQueue = [];
-let currentCard = null;
-let sessionIdx = 0;
-let revealed = false;
-let lang = 'en-pt';
-let sessionStats = { easy: 0, ok: 0, hard: 0 };
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ══════════════════════════════════════════
-//  SRS — SM-2 simplified
-// ══════════════════════════════════════════
-function getSRSData(id) {
-  const raw = localStorage.getItem('lp_' + id);
-  if (!raw) return { interval: 0, ef: 2.5, due: 0, reps: 0 };
-  return JSON.parse(raw);
+const firebaseConfig = {
+  apiKey: "AIzaSyAWpzU4vlkx1_4dAoq9yHxdtochV9DVdaw",
+  authDomain: "lexipro-6b7ab.firebaseapp.com",
+  databaseURL: "https://lexipro-6b7ab-default-rtdb.firebaseio.com",
+  projectId: "lexipro-6b7ab",
+  storageBucket: "lexipro-6b7ab.firebasestorage.app",
+  messagingSenderId: "741676550495",
+  appId: "1:741676550495:web:b750716de30d395ecf4eea"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getDatabase(fbApp);
+let currentUser = null;
+
+function renderAuthUI(user) {
+  const bar = document.getElementById('auth-bar');
+  if (user) {
+    bar.innerHTML = `<img src="${user.photoURL}" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--border2)" title="${user.displayName}"><button id="btn-so" style="font-size:0.65rem;padding:0.2rem 0.45rem;border:1px solid var(--border);border-radius:5px;background:transparent;color:var(--text-muted);cursor:pointer;font-family:'Syne',sans-serif">Sair</button>`;
+    document.getElementById('btn-so').onclick = () => signOut(auth);
+  } else {
+    bar.innerHTML = `<button id="btn-si" style="font-size:0.7rem;padding:0.25rem 0.6rem;border:1px solid var(--accent);border-radius:7px;background:transparent;color:var(--accent);cursor:pointer;font-family:'Syne',sans-serif;font-weight:600">☁ Sync</button>`;
+    document.getElementById('btn-si').onclick = async () => {
+      try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+      catch(e) { toast('Erro ao entrar'); }
+    };
+  }
 }
 
-function saveSRS(id, data) {
-  localStorage.setItem('lp_' + id, JSON.stringify(data));
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  renderAuthUI(user);
+  if (user) {
+    try {
+      const snap = await get(child(ref(db), `users/${user.uid}/srs`));
+      if (snap.exists()) Object.entries(snap.val()).forEach(([k,v]) => localStorage.setItem('lp_'+k, JSON.stringify(v)));
+    } catch(e) {}
+    updateHeaderStats();
+  }
+});
+
+async function saveSRSRemote(id, data) {
+  if (!currentUser) return;
+  try { await set(ref(db, `users/${currentUser.uid}/srs/${id.replace(/[.#$\[\]]/g,'_')}`), data); } catch(e) {}
 }
+
+// STATE
+let allCards=[], sessionQueue=[], currentCard=null, sessionIdx=0, revealed=false, lang='en-pt';
+let sessionStats={easy:0,ok:0,hard:0};
+
+// DECKS
+function getDecks() { try { return JSON.parse(localStorage.getItem('lp_decks')||'[]'); } catch(e) { return []; } }
+function saveDecks(d) { localStorage.setItem('lp_decks', JSON.stringify(d)); }
+
+function addDeck(name, cards, deckLang) {
+  const decks = getDecks();
+  const idx = decks.findIndex(d => d.name === name);
+  const deck = { name, lang: deckLang, count: cards.length, added: Date.now() };
+  if (idx >= 0) decks[idx] = deck; else decks.push(deck);
+  saveDecks(decks);
+  localStorage.setItem('lp_cards_' + name, JSON.stringify(cards));
+}
+
+function loadDeckCards(name) { try { return JSON.parse(localStorage.getItem('lp_cards_'+name)||'[]'); } catch(e) { return []; } }
+
+window.removeDeckConfirm = function(name) {
+  if (confirm(`Remover deck "${name}" e todo o progresso?`)) {
+    let decks = getDecks().filter(d => d.name !== name);
+    saveDecks(decks);
+    localStorage.removeItem('lp_cards_' + name);
+    if (localStorage.getItem('lp_active_deck') === name) {
+      localStorage.removeItem('lp_active_deck');
+      allCards = [];
+      document.getElementById('btn-start').disabled = true;
+    }
+    toast('Deck removido');
+    renderDeckList();
+    updateHeaderStats();
+  }
+};
+
+window.selectDeck = function(name) {
+  const cards = loadDeckCards(name);
+  const decks = getDecks();
+  const deck = decks.find(d => d.name === name);
+  if (!cards.length || !deck) return;
+  allCards = cards;
+  lang = deck.lang;
+  localStorage.setItem('lp_active_deck', name);
+  document.getElementById('btn-start').disabled = false;
+  updateHeaderStats();
+  renderDeckList();
+  toast(`${cards.length} cards prontos!`);
+};
+
+function renderDeckList() {
+  const decks = getDecks();
+  const list = document.getElementById('deck-list');
+  const active = localStorage.getItem('lp_active_deck');
+  if (!decks.length) { list.innerHTML = '<div style="font-size:0.78rem;color:var(--text-muted);padding:0.25rem 0">Nenhum deck ainda.</div>'; return; }
+  const flagMap = {'en-pt':'🇺🇸','es-pt':'🇪🇸'};
+  const labelMap = {'en-pt':'EN → PT','es-pt':'ES → PT'};
+  list.innerHTML = decks.map(d => `<div class="deck-item ${active===d.name?'selected':''}" onclick="selectDeck('${d.name.replace(/'/g,"\\'")}')">
+    <div class="deck-item-left">
+      <div class="deck-flag">${flagMap[d.lang]||'📚'}</div>
+      <div class="deck-info">
+        <div class="deck-name">${d.name}</div>
+        <div class="deck-meta">${d.count} cards · ${labelMap[d.lang]||d.lang}</div>
+      </div>
+    </div>
+    <div class="deck-item-right">
+      <span class="deck-check">✓</span>
+      <button class="deck-remove" onclick="event.stopPropagation();removeDeckConfirm('${d.name.replace(/'/g,"\\'")}')">✕</button>
+    </div>
+  </div>`).join('');
+}
+
+// SRS
+function getSRSData(id) { try { return JSON.parse(localStorage.getItem('lp_'+id)||'null') || {interval:0,ef:2.5,due:0,reps:0}; } catch(e) { return {interval:0,ef:2.5,due:0,reps:0}; } }
+function saveSRS(id, data) { localStorage.setItem('lp_'+id, JSON.stringify(data)); saveSRSRemote(id, data); }
 
 function updateSRS(id, q) {
-  // q: 0=hard, 1=ok, 2=easy
   let d = getSRSData(id);
   const now = Date.now();
-
-  if (q === 0) {
-    d.interval = 0; // repeat in 10 min
-    d.due = now + 10 * 60 * 1000;
-    d.reps = 0;
-  } else {
-    d.ef = Math.max(1.3, d.ef + (0.1 - (2 - q) * (0.08 + (2 - q) * 0.02)));
-    if (d.reps === 0) d.interval = 1;
-    else if (d.reps === 1) d.interval = 4;
-    else d.interval = Math.round(d.interval * d.ef);
-    d.due = now + d.interval * 24 * 60 * 60 * 1000;
-    d.reps += 1;
+  if (q === 0) { d.interval=0; d.due=now+10*60*1000; d.reps=0; }
+  else {
+    d.ef = Math.max(1.3, d.ef+(0.1-(2-q)*(0.08+(2-q)*0.02)));
+    if (d.reps===0) d.interval=1;
+    else if (d.reps===1) d.interval=4;
+    else d.interval=Math.round(d.interval*d.ef);
+    d.due=now+d.interval*24*60*60*1000; d.reps++;
   }
-  saveSRS(id, d);
-  return d;
+  saveSRS(id, d); return d;
 }
 
-function isDue(id) {
-  const d = getSRSData(id);
-  return d.due <= Date.now();
-}
+function isDue(id) { return getSRSData(id).due <= Date.now(); }
 
 function getNextInterval(id, q) {
   const d = getSRSData(id);
-  if (q === 0) return '10 min';
-  const ef = Math.max(1.3, d.ef + (0.1 - (2 - q) * (0.08 + (2 - q) * 0.02)));
-  let interval;
-  if (d.reps === 0) interval = 1;
-  else if (d.reps === 1) interval = 4;
-  else interval = Math.round(d.interval * ef);
-  return interval === 1 ? '1 dia' : `${interval} dias`;
+  if (q===0) return '10 min';
+  const ef = Math.max(1.3, d.ef+(0.1-(2-q)*(0.08+(2-q)*0.02)));
+  let i = d.reps===0?1:d.reps===1?4:Math.round(d.interval*ef);
+  return i===1?'1 dia':`${i} dias`;
 }
 
-// ══════════════════════════════════════════
-//  CSV PARSING
-// ══════════════════════════════════════════
-function parseCSV(text) {
+// CSV
+function parseCSV(text, deckLang) {
   const lines = text.trim().split('\n');
   const cards = [];
-
-  // Detect header — skip lines that look like headers
   let start = 0;
-  const first = lines[0].toLowerCase();
-  if (first.includes('english') || first.includes('id') || first.includes('vocab') || first.includes('español')) {
-    start = 1;
-    // If line 0 is a title and line 1 is actual header
-    const second = lines[1] ? lines[1].toLowerCase() : '';
-    if (second.includes('english') || second.includes('id')) start = 2;
+  const f = lines[0].toLowerCase();
+  if (f.includes('english')||f.includes('id')||f.includes('vocab')||f.includes('español')||f.includes('espanhol')) {
+    start=1;
+    const s = lines[1]?lines[1].toLowerCase():'';
+    if (s.includes('english')||s.includes('id')||s.includes('español')) start=2;
   }
-
-  for (let i = start; i < lines.length; i++) {
-    const cols = lines[i].split(';').map(c => c.trim().replace(/^"|"$/g, ''));
-    if (cols.length < 3) continue;
-
-    // Try to detect column layout
-    // EN-PT: ID | English | Português | Categoria | Fonética
-    // ES-EN: ID | Español | English | Categoria | Fonética (or similar)
-    let id, front, back, category, phonetic;
-
-    // If first col is numeric = has ID column
-    if (!isNaN(cols[0]) && cols[0] !== '') {
-      id = cols[0];
-      front = cols[1] || '';
-      back = cols[2] || '';
-      category = cols[3] || '';
-      phonetic = cols[4] || '';
-    } else {
-      id = i.toString();
-      front = cols[0] || '';
-      back = cols[1] || '';
-      category = cols[2] || '';
-      phonetic = cols[3] || '';
-    }
-
-    if (!front || !back) continue;
-
-    cards.push({
-      id: `${lang}_${id}`,
-      front: front.trim(),
-      back: back.trim(),
-      category: category.trim(),
-      phonetic: phonetic.trim(),
-    });
+  for (let i=start; i<lines.length; i++) {
+    const c = lines[i].split(';').map(x=>x.trim().replace(/^"|"$/g,''));
+    if (c.length<3) continue;
+    let id,front,back,cat,ph;
+    if (!isNaN(c[0])&&c[0]!=='') { id=c[0];front=c[1]||'';back=c[2]||'';cat=c[3]||'';ph=c[4]||''; }
+    else { id=i.toString();front=c[0]||'';back=c[1]||'';cat=c[2]||'';ph=c[3]||''; }
+    if (!front||!back) continue;
+    cards.push({id:`${deckLang}_${id}`,front:front.trim(),back:back.trim(),category:cat.trim(),phonetic:ph.trim()});
   }
   return cards;
 }
 
-// ══════════════════════════════════════════
-//  FILE HANDLING
-// ══════════════════════════════════════════
+// FILE
 function handleFile(input) {
   const file = input.files[0];
   if (!file) return;
-  document.getElementById('file-name').textContent = '✓ ' + file.name;
   const reader = new FileReader();
   reader.onload = e => {
-    allCards = parseCSV(e.target.result);
+    const cards = parseCSV(e.target.result, lang);
+    if (!cards.length) { toast('Nenhum card encontrado'); return; }
+    const name = file.name.replace(/\.[^/.]+$/,'');
+    addDeck(name, cards, lang);
+    allCards = cards;
+    localStorage.setItem('lp_active_deck', name);
+    document.getElementById('btn-start').disabled = false;
+    document.getElementById('file-name').textContent = '';
+    input.value = '';
+    renderDeckList();
     updateHeaderStats();
-    document.getElementById('btn-start').disabled = allCards.length === 0;
-    if (allCards.length === 0) toast('Nenhum card encontrado. Verifique o CSV.');
-    else toast(`${allCards.length} cards carregados!`);
+    toast(`${cards.length} cards adicionados!`);
   };
   reader.readAsText(file, 'UTF-8');
 }
 
-// ══════════════════════════════════════════
-//  DEMO DATA
-// ══════════════════════════════════════════
-function loadDemo() {
+// DEMO
+function runDemo() {
   const demo = [
-    { id:'demo_1', front:'cash flow', back:'fluxo de caixa', category:'Finanças', phonetic:'kash flo' },
-    { id:'demo_2', front:'budget', back:'orçamento', category:'Finanças', phonetic:'BAJ-et' },
-    { id:'demo_3', front:'accounts payable', back:'contas a pagar', category:'Contábil', phonetic:'a-KAUNTS PEY-a-bl' },
-    { id:'demo_4', front:'revenue', back:'receita', category:'Finanças', phonetic:'REV-e-nyu' },
-    { id:'demo_5', front:'ebitda', back:'LAJIDA', category:'Finanças', phonetic:'ee-bee-ai-tee-dee-ey' },
-    { id:'demo_6', front:'stakeholder', back:'parte interessada', category:'Gestão', phonetic:'STEYK-hol-der' },
-    { id:'demo_7', front:'milestone', back:'marco / etapa', category:'Gestão', phonetic:'MAIL-ston' },
-    { id:'demo_8', front:'procurement', back:'aquisição / compras', category:'Compras', phonetic:'pro-KYUR-ment' },
-    { id:'demo_9', front:'withholding tax', back:'imposto retido na fonte', category:'Fiscal', phonetic:'with-HOL-ding taks' },
-    { id:'demo_10', front:'reconciliation', back:'conciliação', category:'Contábil', phonetic:'rek-on-sil-i-EY-shon' },
+    {id:'demo_1',front:'cash flow',back:'fluxo de caixa',category:'Finanças',phonetic:'kash flo'},
+    {id:'demo_2',front:'budget',back:'orçamento',category:'Finanças',phonetic:'BAJ-et'},
+    {id:'demo_3',front:'accounts payable',back:'contas a pagar',category:'Contábil',phonetic:'a-KAUNTS PEY-a-bl'},
+    {id:'demo_4',front:'revenue',back:'receita',category:'Finanças',phonetic:'REV-e-nyu'},
+    {id:'demo_5',front:'ebitda',back:'LAJIDA',category:'Finanças',phonetic:'ee-bee-ai-tee-dee-ey'},
+    {id:'demo_6',front:'stakeholder',back:'parte interessada',category:'Gestão',phonetic:'STEYK-hol-der'},
+    {id:'demo_7',front:'milestone',back:'marco / etapa',category:'Gestão',phonetic:'MAIL-ston'},
+    {id:'demo_8',front:'procurement',back:'aquisição / compras',category:'Compras',phonetic:'pro-KYUR-ment'},
+    {id:'demo_9',front:'withholding tax',back:'imposto retido na fonte',category:'Fiscal',phonetic:'with-HOL-ding taks'},
+    {id:'demo_10',front:'reconciliation',back:'conciliação',category:'Contábil',phonetic:'rek-on-sil-i-EY-shon'},
   ];
-  allCards = demo;
-  document.getElementById('file-name').textContent = '✓ demo (10 cards)';
-  document.getElementById('btn-start').disabled = false;
+  addDeck('Demo EN→PT', demo, 'en-pt');
+  allCards=demo; lang='en-pt';
+  localStorage.setItem('lp_active_deck','Demo EN→PT');
   updateHeaderStats();
-  toast('10 cards de demonstração carregados!');
+  startSession();
 }
 
-// ══════════════════════════════════════════
-//  SESSION
-// ══════════════════════════════════════════
+// SESSION
 function buildQueue() {
-  const due = allCards.filter(c => isDue(c.id));
-  // Mix new cards (never reviewed) and due cards
-  const newCards = due.filter(c => getSRSData(c.id).reps === 0);
-  const review = due.filter(c => getSRSData(c.id).reps > 0);
-  // Shuffle
-  shuffle(newCards); shuffle(review);
-  // Session limit: 20 cards max
-  return [...review, ...newCards].slice(0, 20);
+  const due = allCards.filter(c=>isDue(c.id));
+  const nw = due.filter(c=>getSRSData(c.id).reps===0);
+  const rv = due.filter(c=>getSRSData(c.id).reps>0);
+  shuffle(nw); shuffle(rv);
+  return [...rv,...nw].slice(0,20);
 }
 
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
+function shuffle(a) { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} }
 
 function startSession() {
-  sessionStats = { easy: 0, ok: 0, hard: 0 };
-  sessionQueue = buildQueue();
-  sessionIdx = 0;
-
-  if (sessionQueue.length === 0) {
-    // Show next due time
-    const nextDue = allCards
-      .map(c => getSRSData(c.id).due)
-      .filter(d => d > Date.now())
-      .sort()[0];
-    const mins = nextDue ? Math.round((nextDue - Date.now()) / 60000) : null;
-    document.getElementById('done-easy').textContent = '🎉';
-    document.getElementById('done-ok').textContent = '';
-    document.getElementById('done-hard').textContent = '';
-    document.querySelector('.done-title').textContent = 'Tudo em dia!';
-    document.querySelector('.done-sub').textContent = mins
-      ? `Próxima revisão em ${mins < 60 ? mins + ' min' : Math.round(mins/60) + ' h'}.`
-      : 'Carregue um CSV para começar.';
-    showScreen('done');
-    return;
+  if (!allCards.length) { toast('Selecione um deck primeiro'); goSetup(); return; }
+  sessionStats={easy:0,ok:0,hard:0};
+  sessionQueue=buildQueue(); sessionIdx=0;
+  if (!sessionQueue.length) {
+    const nd = allCards.map(c=>getSRSData(c.id).due).filter(d=>d>Date.now()).sort()[0];
+    const mins = nd?Math.round((nd-Date.now())/60000):null;
+    document.getElementById('done-easy').textContent='🎉';
+    document.getElementById('done-ok').textContent='';
+    document.getElementById('done-hard').textContent='';
+    document.getElementById('done-title').textContent='Tudo em dia!';
+    document.getElementById('done-sub').textContent=mins?`Próxima revisão em ${mins<60?mins+' min':Math.round(mins/60)+' h'}.`:'Carregue um CSV para começar.';
+    showScreen('done'); return;
   }
-
-  showScreen('study');
-  showCard();
+  showScreen('study'); showCard();
 }
 
 function showCard() {
-  if (sessionIdx >= sessionQueue.length) {
-    endSession();
-    return;
-  }
-
-  currentCard = sessionQueue[sessionIdx];
-  revealed = false;
-
-  const srs = getSRSData(currentCard.id);
-  const isNew = srs.reps === 0;
-
-  document.getElementById('card-front').textContent = currentCard.front;
-  document.getElementById('card-back').textContent = currentCard.back;
-  document.getElementById('card-phonetic').textContent = currentCard.phonetic || '';
-  document.getElementById('card-cat').textContent = currentCard.category;
-  document.getElementById('card-badge').textContent = lang === 'en-pt' ? 'EN → PT' : 'ES → EN';
-  document.getElementById('card-hint').style.display = '';
+  if (sessionIdx>=sessionQueue.length) { endSession(); return; }
+  currentCard=sessionQueue[sessionIdx]; revealed=false;
+  const bm={'en-pt':'EN → PT','es-pt':'ES → PT'};
+  document.getElementById('card-front').textContent=currentCard.front;
+  document.getElementById('card-original').textContent=currentCard.front;
+  document.getElementById('card-back').textContent=currentCard.back;
+  document.getElementById('card-phonetic').textContent=currentCard.phonetic||'';
+  document.getElementById('card-cat').textContent=currentCard.category;
+  document.getElementById('card-badge').textContent=bm[lang]||'EN → PT';
+  document.getElementById('card-front-wrap').style.display='flex';
   document.getElementById('card-answer').classList.remove('visible');
   document.getElementById('rating-row').classList.remove('visible');
-
-  // Progress
-  const pct = (sessionIdx / sessionQueue.length) * 100;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('sess-progress').textContent = `${sessionIdx} / ${sessionQueue.length}`;
-  const newCount = sessionQueue.filter(c => getSRSData(c.id).reps === 0).length;
-  document.getElementById('sess-new').textContent = `🆕 ${newCount} novos`;
-
-  // Interval previews
-  document.getElementById('days-hard').textContent = getNextInterval(currentCard.id, 0);
-  document.getElementById('days-ok').textContent = getNextInterval(currentCard.id, 1);
-  document.getElementById('days-easy').textContent = getNextInterval(currentCard.id, 2);
+  const sh=document.getElementById('swipe-hint');
+  if(sh) sh.style.display='none';
+  const pct=(sessionIdx/sessionQueue.length)*100;
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('sess-progress').textContent=`${sessionIdx} / ${sessionQueue.length}`;
+  const nc=sessionQueue.slice(sessionIdx).filter(c=>getSRSData(c.id).reps===0).length;
+  document.getElementById('sess-new').textContent=`🆕 ${nc} novos`;
+  document.getElementById('days-hard').textContent=getNextInterval(currentCard.id,0);
+  document.getElementById('days-ok').textContent=getNextInterval(currentCard.id,1);
+  document.getElementById('days-easy').textContent=getNextInterval(currentCard.id,2);
+  document.getElementById('study-card').style.transform='';
+  document.getElementById('study-card').style.boxShadow='';
 }
 
 function revealCard() {
-  if (revealed) return;
-  revealed = true;
-  document.getElementById('card-hint').style.display = 'none';
+  if(revealed) return; revealed=true;
+  document.getElementById('card-front-wrap').style.display='none';
   document.getElementById('card-answer').classList.add('visible');
   document.getElementById('rating-row').classList.add('visible');
+  const sh=document.getElementById('swipe-hint');
+  if(sh&&window.innerWidth<=600) sh.style.display='flex';
 }
 
 function rate(q) {
-  if (!revealed) return;
-  updateSRS(currentCard.id, q);
-  if (q === 2) sessionStats.easy++;
-  else if (q === 1) sessionStats.ok++;
-  else sessionStats.hard++;
-
-  // If hard, re-add to queue
-  if (q === 0) sessionQueue.push(currentCard);
-
-  sessionIdx++;
-  showCard();
+  if(!revealed) return;
+  updateSRS(currentCard.id,q);
+  if(q===2) sessionStats.easy++;
+  else if(q===1) sessionStats.ok++;
+  else { sessionStats.hard++; sessionQueue.push(currentCard); }
+  sessionIdx++; showCard();
 }
 
 function endSession() {
-  document.getElementById('progress-fill').style.width = '100%';
-  document.getElementById('done-easy').textContent = sessionStats.easy;
-  document.getElementById('done-ok').textContent = sessionStats.ok;
-  document.getElementById('done-hard').textContent = sessionStats.hard;
-  document.querySelector('.done-title').textContent = 'Sessão concluída!';
-  document.querySelector('.done-sub').textContent = 'Ótimo trabalho. O sistema agendou sua próxima revisão automaticamente.';
-  updateHeaderStats();
-  showScreen('done');
+  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('done-easy').textContent=sessionStats.easy;
+  document.getElementById('done-ok').textContent=sessionStats.ok;
+  document.getElementById('done-hard').textContent=sessionStats.hard;
+  document.getElementById('done-title').textContent='Sessão concluída!';
+  document.getElementById('done-sub').textContent='Ótimo trabalho. O sistema agendou sua próxima revisão automaticamente.';
+  updateHeaderStats(); showScreen('done');
 }
 
-// ══════════════════════════════════════════
-//  UI HELPERS
-// ══════════════════════════════════════════
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-}
+function showScreen(n) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+n).classList.add('active'); }
+function goWelcome() { showScreen('welcome'); }
+function goSetup() { renderDeckList(); showScreen('setup'); }
+function selectLang(l,btn) { lang=l; document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); }
+function updateHeaderStats() { document.getElementById('hdr-total').textContent=allCards.length; document.getElementById('hdr-due').textContent=allCards.filter(c=>isDue(c.id)).length; }
+function toast(msg) { const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2500); }
 
-function goSetup() { showScreen('setup'); }
-
-function selectLang(l, btn) {
-  lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-}
-
-function updateHeaderStats() {
-  document.getElementById('hdr-total').textContent = allCards.length;
-  const due = allCards.filter(c => isDue(c.id)).length;
-  document.getElementById('hdr-due').textContent = due;
-}
-
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
+// Globals
+window.goSetup=goSetup; window.goWelcome=goWelcome; window.runDemo=runDemo;
+window.startSession=startSession; window.revealCard=revealCard; window.rate=rate;
+window.selectLang=selectLang; window.handleFile=handleFile;
 
 // Drag & drop
-const ua = document.getElementById('upload-area');
-ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
-ua.addEventListener('dragleave', () => ua.classList.remove('dragover'));
-ua.addEventListener('drop', e => {
-  e.preventDefault();
-  ua.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith('.csv')) {
-    document.getElementById('file-name').textContent = '✓ ' + file.name;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      allCards = parseCSV(ev.target.result);
-      updateHeaderStats();
-      document.getElementById('btn-start').disabled = allCards.length === 0;
-      toast(`${allCards.length} cards carregados!`);
+const ua=document.getElementById('upload-area');
+ua.addEventListener('dragover',e=>{e.preventDefault();ua.classList.add('dragover');});
+ua.addEventListener('dragleave',()=>ua.classList.remove('dragover'));
+ua.addEventListener('drop',e=>{
+  e.preventDefault(); ua.classList.remove('dragover');
+  const f=e.dataTransfer.files[0];
+  if(f&&f.name.endsWith('.csv')){
+    const r=new FileReader();
+    r.onload=ev=>{
+      const cards=parseCSV(ev.target.result,lang);
+      if(!cards.length){toast('Nenhum card encontrado');return;}
+      const name=f.name.replace(/\.[^/.]+$/,'');
+      addDeck(name,cards,lang); allCards=cards;
+      localStorage.setItem('lp_active_deck',name);
+      document.getElementById('btn-start').disabled=false;
+      renderDeckList(); updateHeaderStats();
+      toast(`${cards.length} cards carregados!`);
     };
-    reader.readAsText(file, 'UTF-8');
+    r.readAsText(f,'UTF-8');
   }
 });
 
-// Keyboard shortcuts
-document.addEventListener('keydown', e => {
-  if (document.getElementById('screen-study').classList.contains('active')) {
-    if (e.code === 'Space' && !revealed) { e.preventDefault(); revealCard(); }
-    if (revealed) {
-      if (e.key === '1') rate(0);
-      if (e.key === '2') rate(1);
-      if (e.key === '3') rate(2);
-    }
+// Swipe
+let tX=0,drag=false;
+const ce=document.getElementById('study-card');
+ce.addEventListener('touchstart',e=>{tX=e.touches[0].clientX;drag=false;},{passive:true});
+ce.addEventListener('touchmove',e=>{
+  if(!revealed)return; drag=true;
+  const dx=e.touches[0].clientX-tX;
+  const cl=Math.max(-130,Math.min(130,dx));
+  ce.style.transform=`translateX(${cl}px) rotate(${cl*0.06}deg)`;
+  ce.style.boxShadow=dx>40?'0 0 0 2px var(--green)':dx<-40?'0 0 0 2px var(--red)':'';
+},{passive:true});
+ce.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tX;
+  ce.style.transform=''; ce.style.boxShadow='';
+  if(!revealed||!drag)return;
+  if(dx>80)rate(2); else if(dx<-80)rate(0);
+  drag=false;
+},{passive:true});
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('screen-study').classList.contains('active')){
+    if(e.code==='Space'&&!revealed){e.preventDefault();revealCard();}
+    if(revealed){if(e.key==='1')rate(0);if(e.key==='2')rate(1);if(e.key==='3')rate(2);}
   }
 });
 
+// Init
+const ad=localStorage.getItem('lp_active_deck');
+if(ad){const c=loadDeckCards(ad);if(c.length){allCards=c;const decks=getDecks();const d=decks.find(x=>x.name===ad);if(d)lang=d.lang;}}
 updateHeaderStats();
 </script>
 </body>
