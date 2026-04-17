@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0056)file:///C:/Users/Serlyo.doliveira/Downloads/index_3.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LexiPro — Vocabulário de Negócios</title>
-<link href="./LexiPro — Vocabulário de Negócios_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0f0e;
@@ -425,96 +425,12 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* ── SWIPE HINT ── */
-  .swipe-hint {
-    display: none;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 0.5rem;
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-  .swipe-hint span { display: flex; align-items: center; gap: 0.3rem; }
-
-  /* ── MOBILE FIRST ── */
-  @media (max-width: 600px) {
-    body { font-size: 16px; }
-
-    header {
-      padding: 0.85rem 1rem;
-    }
-    .logo { font-size: 1.25rem; }
-    .logo span { display: none; }
-    .stat-pill { font-size: 0.72rem; }
-    .stat-pill strong { font-size: 0.8rem; }
-    .header-stats { gap: 1rem; }
-
-    main {
-      padding: 1rem 0.85rem;
-      justify-content: flex-start;
-      padding-top: 1.25rem;
-    }
-
-    .screen.active { gap: 1rem; }
-
-    /* Setup */
-    .setup-card { padding: 1.5rem; border-radius: 14px; }
-    .setup-title { font-size: 1.6rem; }
-    .setup-sub { font-size: 0.85rem; margin-bottom: 1.5rem; }
-    .lang-btn { padding: 0.95rem 0.5rem; font-size: 0.85rem; }
-    .upload-area { padding: 1.5rem 1rem; }
-    .btn-primary { padding: 1.1rem; font-size: 1rem; border-radius: 12px; }
-
-    /* Card */
-    .card {
-      min-height: 300px;
-      padding: 2rem 1.5rem;
-      border-radius: 18px;
-      touch-action: pan-y;
-    }
-    .card-word { font-size: 2.2rem; }
-    .card-translation { font-size: 1.5rem; }
-    .card-phonetic { font-size: 0.95rem; padding: 0.4rem 1rem; }
-    .card-hint { font-size: 0.9rem; }
-
-    /* Rating buttons — big touch targets */
-    .rating-row.visible {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.6rem;
-    }
-    .rating-btn {
-      padding: 1.1rem 0.4rem;
-      border-radius: 14px;
-      font-size: 0.9rem;
-      min-height: 70px;
-    }
-    .rating-btn .days { font-size: 0.72rem; }
-
-    /* Swipe hint visible on mobile after reveal */
-    .swipe-hint { display: flex; }
-
-    /* Done screen */
-    .done-card { padding: 2rem 1.5rem; border-radius: 18px; }
-    .done-title { font-size: 1.5rem; }
-    .done-stat .val { font-size: 1.6rem; }
-    .done-stats { gap: 0.75rem; }
-
-    .btn-secondary {
-      width: 100%;
-      text-align: center;
-      padding: 0.9rem;
-    }
-
-    /* Progress info */
-    .session-info { font-size: 0.75rem; }
-  }
-
-  /* Landscape mobile */
-  @media (max-width: 600px) and (orientation: landscape) {
-    .card { min-height: 200px; }
-    main { padding-top: 0.75rem; }
+  /* Mobile */
+  @media (max-width: 480px) {
+    header { padding: 1rem; }
+    .header-stats { gap: 0.75rem; }
+    .setup-card { padding: 1.75rem; }
+    .card-word { font-size: 1.9rem; }
   }
 </style>
 </head>
@@ -525,7 +441,6 @@
   <div class="header-stats">
     <div class="stat-pill">📚 <strong id="hdr-total">0</strong> cards</div>
     <div class="stat-pill">🔥 <strong id="hdr-due">0</strong> p/ revisar</div>
-    <div id="auth-bar" style="display:flex;align-items:center;gap:0.5rem"></div>
   </div>
 </header>
 
@@ -539,8 +454,8 @@
 
       <label class="field-label">Idioma do deck</label>
       <div class="lang-toggle">
-        <button class="lang-btn selected" onclick="selectLang(&#39;en-pt&#39;, this)">🇺🇸 Inglês → Português</button>
-        <button class="lang-btn" onclick="selectLang(&#39;es-en&#39;, this)">🇪🇸 Espanhol → Inglês</button>
+        <button class="lang-btn selected" onclick="selectLang('en-pt', this)">🇺🇸 Inglês → Português</button>
+        <button class="lang-btn" onclick="selectLang('es-en', this)">🇪🇸 Espanhol → Inglês</button>
       </div>
 
       <label class="field-label">Arquivo CSV (separado por ponto-e-vírgula)</label>
@@ -551,7 +466,7 @@
         <div class="upload-name" id="file-name"></div>
       </div>
 
-      <button class="btn-primary" id="btn-start" onclick="startSession()" disabled="">
+      <button class="btn-primary" id="btn-start" onclick="startSession()" disabled>
         Iniciar sessão →
       </button>
     </div>
@@ -596,11 +511,6 @@
       </button>
     </div>
 
-    <div class="swipe-hint" id="swipe-hint" style="display:none">
-      <span>👈 Difícil</span>
-      <span>Fácil 👉</span>
-    </div>
-
     <button class="btn-secondary" onclick="goSetup()">← Trocar deck</button>
   </div>
 
@@ -633,69 +543,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAWpzU4vlkx1_4dAoq9yHxdtochV9DVdaw",
-  authDomain: "lexipro-6b7ab.firebaseapp.com",
-  databaseURL: "https://lexipro-6b7ab-default-rtdb.firebaseio.com",
-  projectId: "lexipro-6b7ab",
-  storageBucket: "lexipro-6b7ab.firebasestorage.app",
-  messagingSenderId: "741676550495",
-  appId: "1:741676550495:web:b750716de30d395ecf4eea"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const auth = getAuth(fbApp);
-const db = getDatabase(fbApp);
-
-let currentUser = null;
-let srsCache = {};
-
-function renderAuthUI(user) {
-  const bar = document.getElementById('auth-bar');
-  if (user) {
-    bar.innerHTML = `<img src="${user.photoURL}" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--border)">
-      <span style="font-size:0.75rem;color:var(--text-muted)">${user.displayName?.split(' ')[0]}</span>
-      <button id="btn-signout" style="font-size:0.7rem;padding:0.25rem 0.55rem;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text-muted);cursor:pointer">Sair</button>`;
-    document.getElementById('btn-signout').onclick = () => signOut(auth);
-  } else {
-    bar.innerHTML = `<button id="btn-signin" style="font-size:0.75rem;padding:0.3rem 0.7rem;border:1px solid var(--accent);border-radius:7px;background:transparent;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif">☁ Sync</button>`;
-    document.getElementById('btn-signin').onclick = async () => {
-      try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-      catch(e) { toast('Erro ao entrar com Google'); }
-    };
-  }
-}
-
-onAuthStateChanged(auth, async user => {
-  currentUser = user;
-  renderAuthUI(user);
-  if (user) {
-    try {
-      const snap = await get(child(ref(db), `users/${user.uid}/srs`));
-      if (snap.exists()) {
-        srsCache = snap.val();
-        // Merge remote into localStorage
-        Object.entries(srsCache).forEach(([k, v]) => {
-          localStorage.setItem('lp_' + k, JSON.stringify(v));
-        });
-      }
-    } catch(e) { console.warn('Firebase read:', e); }
-    updateHeaderStats();
-  }
-});
-
-async function saveSRSRemote(id, data) {
-  if (!currentUser) return;
-  const safeId = id.replace(/[.#$\[\]]/g, '_');
-  try { await set(ref(db, `users/${currentUser.uid}/srs/${safeId}`), data); }
-  catch(e) { console.warn('Firebase write:', e); }
-}
-
+<script>
 // ══════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════
@@ -718,7 +566,6 @@ function getSRSData(id) {
 
 function saveSRS(id, data) {
   localStorage.setItem('lp_' + id, JSON.stringify(data));
-  saveSRSRemote(id, data); // sync to Firebase if logged in
 }
 
 function updateSRS(id, q) {
@@ -921,8 +768,6 @@ function showCard() {
   document.getElementById('card-hint').style.display = '';
   document.getElementById('card-answer').classList.remove('visible');
   document.getElementById('rating-row').classList.remove('visible');
-  const hint = document.getElementById('swipe-hint');
-  if (hint) hint.style.display = 'none';
 
   // Progress
   const pct = (sessionIdx / sessionQueue.length) * 100;
@@ -943,9 +788,6 @@ function revealCard() {
   document.getElementById('card-hint').style.display = 'none';
   document.getElementById('card-answer').classList.add('visible');
   document.getElementById('rating-row').classList.add('visible');
-  // Show swipe hint on mobile
-  const hint = document.getElementById('swipe-hint');
-  if (hint && window.innerWidth <= 600) hint.style.display = 'flex';
 }
 
 function rate(q) {
@@ -1002,15 +844,6 @@ function toast(msg) {
   setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-// Expose functions globally for HTML onclick handlers
-window.selectLang = selectLang;
-window.handleFile = handleFile;
-window.startSession = startSession;
-window.loadDemo = loadDemo;
-window.revealCard = revealCard;
-window.rate = rate;
-window.goSetup = goSetup;
-
 // Drag & drop
 const ua = document.getElementById('upload-area');
 ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
@@ -1032,46 +865,8 @@ ua.addEventListener('drop', e => {
   }
 });
 
-// ══════════════════════════════════════════
-//  SWIPE GESTURE
-// ══════════════════════════════════════════
-let touchStartX = 0;
-let isDragging = false;
-const cardEl = document.getElementById('study-card');
-
-cardEl.addEventListener('touchstart', e => {
-  touchStartX = e.touches[0].clientX;
-  isDragging = false;
-}, { passive: true });
-
-cardEl.addEventListener('touchmove', e => {
-  if (!revealed) return;
-  const dx = e.touches[0].clientX - touchStartX;
-  const dy = e.touches[0].clientY - (e.touches[0].clientY); // unused
-  isDragging = true;
-  const clamp = Math.max(-130, Math.min(130, dx));
-  cardEl.style.transform = `translateX(${clamp}px) rotate(${clamp * 0.07}deg)`;
-  cardEl.style.boxShadow = dx > 40
-    ? '0 0 0 2px var(--green)'
-    : dx < -40 ? '0 0 0 2px var(--red)' : '';
-}, { passive: true });
-
-cardEl.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  cardEl.style.transform = '';
-  cardEl.style.boxShadow = '';
-  if (!revealed || !isDragging) return;
-  if (dx > 80) rate(2);
-  else if (dx < -80) rate(0);
-  isDragging = false;
-}, { passive: true });
-
-// Show swipe hint on reveal (mobile only)
-const _origReveal = revealCard;
-window._revealCard = revealCard;
-
-updateHeaderStats();
-
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
   if (document.getElementById('screen-study').classList.contains('active')) {
     if (e.code === 'Space' && !revealed) { e.preventDefault(); revealCard(); }
     if (revealed) {
@@ -1084,6 +879,5 @@ updateHeaderStats();
 
 updateHeaderStats();
 </script>
-
-
-</body></html>
+</body>
+</html>
