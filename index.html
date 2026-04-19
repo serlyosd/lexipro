@@ -280,7 +280,7 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 <header>
   <div class="header-left">
     <div class="logo" onclick="goWelcome()">LexiPro</div>
-    <div class="logo-version">v3.1</div>
+    <div class="logo-version">v3.2</div>
   </div>
 
   <!-- Context nav — updated per screen -->
@@ -363,6 +363,7 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
     <div class="lang-direction">
       <button class="lang-btn selected" onclick="selectLang('en-pt',this)">🇺🇸 Inglês → Português</button>
       <button class="lang-btn" onclick="selectLang('es-pt',this)">🇪🇸 Espanhol → Português</button>
+      <button class="lang-btn" onclick="selectLang('zh-pt',this)" style="grid-column:1/-1">🇨🇳 Mandarim → Português</button>
     </div>
     <span class="field-label">2. Arquivo CSV</span>
     <div class="upload-area" id="upload-area">
@@ -445,7 +446,7 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 </main>
 
 <footer>
-  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v3.1</div>
+  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v3.2</div>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -574,7 +575,7 @@ window.removeDeckConfirm=function(name){
 
 function renderLibrary(){
   const decks=getDecks();const grid=document.getElementById('deck-grid');
-  const flagMap={'en-pt':'🇺🇸','es-pt':'🇪🇸'};const labelMap={'en-pt':'EN → PT','es-pt':'ES → PT'};
+  const flagMap={'en-pt':'🇺🇸','es-pt':'🇪🇸','zh-pt':'🇨🇳'};const labelMap={'en-pt':'EN → PT','es-pt':'ES → PT','zh-pt':'ZH → PT'};
   grid.innerHTML='';
   decks.forEach(d=>{
     const cards=loadDeckCards(d.name);
@@ -623,9 +624,9 @@ function getNextInterval(id,q){
 function parseCSV(text,deckLang){
   const lines=text.trim().split('\n');const cards=[];let start=0;
   const f=lines[0].toLowerCase();
-  if(f.includes('english')||f.includes('id')||f.includes('vocab')||f.includes('español')||f.includes('espanhol')||f.includes('expression')){
+  if(f.includes('english')||f.includes('id')||f.includes('vocab')||f.includes('español')||f.includes('espanhol')||f.includes('expression')||f.includes('mandarim')||f.includes('pinyin')){
     start=1;const s=lines[1]?lines[1].toLowerCase():'';
-    if(s.includes('english')||s.includes('id')||s.includes('español')||s.includes('expression'))start=2;
+    if(s.includes('english')||s.includes('id')||s.includes('español')||s.includes('expression')||s.includes('mandarim')||s.includes('pinyin'))start=2;
   }
   for(let i=start;i<lines.length;i++){
     const c=lines[i].split(';').map(x=>x.trim().replace(/^"|"$/g,''));if(c.length<3)continue;
@@ -691,7 +692,7 @@ function startSession(){
 function showCard(){
   if(sessionIdx>=sessionQueue.length){endSession();return;}
   currentCard=sessionQueue[sessionIdx];revealed=false;
-  const bm={'en-pt':'EN → PT','es-pt':'ES → PT'};
+  const bm={'en-pt':'EN → PT','es-pt':'ES → PT','zh-pt':'ZH → PT'};
   document.getElementById('card-front').textContent=currentCard.front;
   document.getElementById('card-original').textContent=currentCard.front;
   document.getElementById('card-back').textContent=currentCard.back;
