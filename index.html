@@ -17,56 +17,89 @@
 html{overflow-y:scroll}
 body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
-/* ══ HEADER — always shows context nav ══ */
-header{padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(8,10,9,0.96);backdrop-filter:blur(12px);z-index:200;gap:0.75rem}
-.header-left{display:flex;align-items:center;gap:0.75rem;flex-shrink:0}
-.logo{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;color:var(--accent);letter-spacing:-0.02em;cursor:pointer;white-space:nowrap}
+/* ══ HEADER ══ */
+header{padding:0.7rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(8,10,9,0.96);backdrop-filter:blur(12px);z-index:200;gap:0.75rem}
+.logo{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;color:var(--accent);cursor:pointer;white-space:nowrap;letter-spacing:-0.02em}
 .logo-version{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--text-muted);background:var(--surface2);padding:0.12rem 0.35rem;border-radius:3px;border:1px solid var(--border)}
 
-/* Context nav — changes per screen */
-.ctx-nav{display:flex;align-items:center;gap:0.5rem;flex:1;justify-content:center}
-.ctx-btn{padding:0.3rem 0.7rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;display:flex;align-items:center;gap:0.3rem}
-.ctx-btn:hover{border-color:var(--border2);color:var(--text)}
-.ctx-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
-.ctx-sep{color:var(--text-muted);font-size:0.7rem;opacity:0.5}
+/* NAV — 3 fixed tabs */
+.main-nav{display:flex;align-items:center;gap:0.35rem;flex:1;justify-content:center}
+.nav-btn{padding:0.32rem 0.9rem;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;display:flex;align-items:center;gap:0.3rem}
+.nav-btn:hover{border-color:var(--border2);color:var(--text)}
+.nav-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
 
 .header-right{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
-.stat-pill{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text-muted);display:flex;align-items:center;gap:0.25rem;cursor:pointer;padding:0.22rem 0.45rem;border-radius:6px;transition:background 0.15s;border:1px solid transparent}
+.stat-pill{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text-muted);display:flex;align-items:center;gap:0.25rem;padding:0.22rem 0.45rem;border-radius:6px;border:1px solid transparent;cursor:pointer;transition:all 0.15s}
 .stat-pill:hover{background:var(--surface2);border-color:var(--border)}
 .stat-pill strong{color:var(--text)}
 #auth-bar{display:flex;align-items:center;gap:0.4rem}
 
 main{flex:1;display:flex;flex-direction:column;align-items:center}
-.screen{display:none;width:100%}
-.screen.active{display:flex;flex-direction:column;align-items:center}
+.env{display:none;width:100%;flex-direction:column;align-items:center}
+.env.active{display:flex}
 
-/* ══ WELCOME ══ */
-#screen-welcome{min-height:calc(100vh - 53px);justify-content:center;padding:2.5rem 1.5rem;position:relative;overflow:hidden}
-.welcome-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 60%,rgba(61,255,192,0.06) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(245,200,66,0.04) 0%,transparent 50%);pointer-events:none}
-.welcome-content{max-width:640px;width:100%;position:relative;z-index:1}
-.welcome-eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
-.welcome-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
-.welcome-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1rem}
-.welcome-title em{font-style:italic;color:var(--accent)}
-.welcome-sub{font-size:0.95rem;color:var(--text-dim);line-height:1.65;margin-bottom:2rem;max-width:480px}
-.welcome-features{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:2rem}
-.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 0.9rem;transition:border-color 0.2s}
-.feature-card:hover{border-color:var(--border2)}
-.feature-icon{font-size:1.35rem;margin-bottom:0.4rem}
-.feature-title{font-size:0.78rem;font-weight:600;margin-bottom:0.2rem}
-.feature-desc{font-size:0.68rem;color:var(--text-muted);line-height:1.5}
-.welcome-cta{display:flex;gap:0.65rem;flex-wrap:wrap}
+/* ══ ENV 1 — BIBLIOTECA ══ */
+#env-library{padding:1.5rem 1.25rem;max-width:700px;width:100%;gap:1rem;margin:0 auto}
+.lib-header{width:100%;display:flex;align-items:center;justify-content:space-between}
+.lib-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700}
 
-/* BUTTONS */
-.btn-primary{padding:0.85rem 1.65rem;background:var(--accent);color:#050e0b;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:0.4rem}
-.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 24px rgba(61,255,192,0.2)}
-.btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none}
-.btn-ghost{padding:0.85rem 1.4rem;background:transparent;color:var(--text-dim);border:1px solid var(--border2);border-radius:11px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:500;cursor:pointer;transition:all 0.15s}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:0.75rem;width:100%}
 
-/* ══ STATS ══ */
-#screen-stats{padding:1.5rem 1.25rem;max-width:600px;width:100%;gap:0.85rem;margin:0 auto}
-.section-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;width:100%}
+.deck-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.25rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.deck-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(61,255,192,0.03) 0%,transparent 60%);pointer-events:none}
+.deck-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
+.deck-card.selected{border-color:var(--accent);background:linear-gradient(135deg,var(--surface) 0%,var(--accent-dim) 100%)}
+
+.deck-flag{font-size:1.8rem;margin-bottom:0.6rem}
+.deck-filename{font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--accent);margin-bottom:0.3rem;word-break:break-all;line-height:1.4}
+.deck-lang{font-size:0.75rem;color:var(--text-muted);margin-bottom:0.5rem}
+.deck-due{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--green);font-weight:500;margin-bottom:0.85rem}
+.deck-due.zero{color:var(--text-muted)}
+
+/* Category chips */
+.deck-cats{display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:0.85rem}
+.cat-chip{padding:0.2rem 0.5rem;border:1px solid var(--border);border-radius:99px;font-size:0.62rem;font-family:'JetBrains Mono',monospace;color:var(--text-muted);cursor:pointer;transition:all 0.15s}
+.cat-chip:hover{border-color:var(--border2);color:var(--text)}
+.cat-chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+.deck-actions{display:flex;gap:0.5rem;border-top:1px solid var(--border);padding-top:0.85rem}
+.deck-btn{flex:1;padding:0.5rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.15s;text-align:center}
+.deck-btn:hover{border-color:var(--border2);color:var(--text)}
+.deck-btn.go{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.deck-btn.go:hover{background:var(--accent);color:#050e0b}
+.deck-btn.del:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+
+.add-deck-card{background:transparent;border:2px dashed var(--border2);border-radius:16px;padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;min-height:180px;color:var(--text-muted)}
+.add-deck-card:hover{border-color:var(--accent);color:var(--accent)}
+.add-deck-icon{font-size:1.8rem}
+.add-deck-label{font-size:0.85rem;font-weight:500}
+
+/* ══ UPLOAD MODAL ══ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:2rem;width:min(480px,92vw);position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:0.9rem;transition:all 0.15s}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:1.25rem}
+.field-label{font-size:0.63rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;display:block}
+.lang-direction{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-bottom:1.25rem}
+.lang-btn{padding:0.7rem 0.3rem;border:1px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text-dim);cursor:pointer;font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:500;transition:all 0.15s;text-align:center}
+.lang-btn:hover{border-color:var(--border2);color:var(--text)}
+.lang-btn.selected{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
+.upload-area{border:2px dashed var(--border2);border-radius:12px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;background:var(--surface2);margin-bottom:1rem}
+.upload-area:hover,.upload-area.dragover{border-color:var(--accent);background:var(--accent-dim)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.upload-icon{font-size:2rem;margin-bottom:0.5rem}
+.upload-title{font-size:0.9rem;font-weight:600;margin-bottom:0.3rem}
+.upload-sub{color:var(--text-muted);font-size:0.75rem;line-height:1.5}
+.upload-sub strong{color:var(--accent)}
+.upload-name{margin-top:0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--green);background:var(--green-dim);padding:0.2rem 0.6rem;border-radius:5px;display:inline-block}
+.upload-hint{padding:0.65rem 0.85rem;background:var(--surface3);border-radius:8px;font-size:0.7rem;color:var(--text-muted);line-height:1.6}
+.upload-hint strong{color:var(--text-dim)}
+
+/* ══ ENV 2 — MÉTRICAS ══ */
+#env-stats{padding:1.5rem 1.25rem;max-width:620px;width:100%;gap:0.85rem;margin:0 auto}
+.stats-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;width:100%}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.65rem;width:100%}
 .stats-box{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.1rem 0.75rem;text-align:center}
 .stats-box .val{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;display:block;line-height:1;margin-bottom:0.25rem}
@@ -86,140 +119,104 @@ main{flex:1;display:flex;flex-direction:column;align-items:center}
 .lang-count{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text-muted)}
 .lang-count span{color:var(--accent)}
 
-/* ══ LIBRARY (deck selection) ══ */
-#screen-library{padding:1.5rem 1.25rem;max-width:700px;width:100%;gap:1rem;margin:0 auto}
-.library-header{width:100%;display:flex;align-items:center;justify-content:space-between}
-.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;width:100%}
-.deck-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.35rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.deck-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(61,255,192,0.03) 0%,transparent 60%);pointer-events:none}
-.deck-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
-.deck-card.selected{border-color:var(--accent);background:linear-gradient(135deg,var(--surface) 0%,var(--accent-dim) 100%)}
-.deck-card-flag{font-size:2.2rem;margin-bottom:0.75rem}
-.deck-card-name{font-size:1rem;font-weight:700;margin-bottom:0.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.deck-card-meta{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text-muted);margin-bottom:0.85rem}
-.deck-card-due{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--green);font-weight:500}
-.deck-card-due.zero{color:var(--text-muted)}
-.deck-card-actions{display:flex;gap:0.5rem;margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid var(--border)}
-.deck-action-btn{flex:1;padding:0.5rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.15s;text-align:center}
-.deck-action-btn:hover{border-color:var(--border2);color:var(--text)}
-.deck-action-btn.primary{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
-.deck-action-btn.primary:hover{background:var(--accent);color:#050e0b}
-.deck-action-btn.danger:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+/* ══ ENV 3 — FLASHCARD ══ */
+#env-study{padding:1rem 1rem 1.5rem;max-width:560px;width:100%;margin:0 auto;gap:0.85rem}
 
-/* Category chips on deck card */
-.deck-cats{display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:0.5rem}
-.cat-chip{padding:0.2rem 0.5rem;border:1px solid var(--border);border-radius:99px;font-size:0.62rem;font-family:'JetBrains Mono',monospace;color:var(--text-muted);cursor:pointer;transition:all 0.15s}
-.cat-chip:hover{border-color:var(--border2);color:var(--text)}
-.cat-chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.no-deck-msg{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.5rem 2rem;text-align:center;width:100%;margin-top:2rem}
+.no-deck-msg .icon{font-size:2.5rem;margin-bottom:0.85rem}
+.no-deck-msg .title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:0.5rem}
+.no-deck-msg .sub{color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem;line-height:1.6}
 
-.add-deck-card{background:transparent;border:2px dashed var(--border2);border-radius:16px;padding:1.35rem;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;min-height:160px;color:var(--text-muted)}
-.add-deck-card:hover{border-color:var(--accent);color:var(--accent)}
-.add-deck-icon{font-size:1.8rem}
-.add-deck-label{font-size:0.85rem;font-weight:500}
-
-.library-start{width:100%;display:flex;gap:0.65rem}
-
-/* ══ UPLOAD ══ */
-#screen-upload{padding:1.5rem 1.25rem;max-width:480px;width:100%;gap:0.9rem;margin:0 auto}
-.upload-card{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.6rem}
-.field-label{font-size:0.63rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.55rem;display:block}
-.lang-direction{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1.35rem}
-.lang-btn{padding:0.85rem 0.5rem;border:1px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text-dim);cursor:pointer;font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:500;transition:all 0.15s;text-align:center}
-.lang-btn:hover{border-color:var(--border2);color:var(--text)}
-.lang-btn.selected{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
-.upload-area{border:2px dashed var(--border2);border-radius:13px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;background:var(--surface2)}
-.upload-area:hover,.upload-area.dragover{border-color:var(--accent);background:var(--accent-dim)}
-.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
-.upload-icon{font-size:2rem;margin-bottom:0.5rem}
-.upload-title{font-size:0.9rem;font-weight:600;margin-bottom:0.3rem}
-.upload-sub{color:var(--text-muted);font-size:0.75rem;line-height:1.5}
-.upload-sub strong{color:var(--accent)}
-.upload-name{margin-top:0.6rem;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--green);background:var(--green-dim);padding:0.2rem 0.6rem;border-radius:5px;display:inline-block}
-.upload-hint{margin-top:0.85rem;padding:0.7rem 0.85rem;background:var(--surface3);border-radius:9px;font-size:0.72rem;color:var(--text-muted);line-height:1.6}
-.upload-hint strong{color:var(--text-dim)}
-
-/* ══ STUDY — clean, focused ══ */
-#screen-study{padding:1rem 1rem 1.5rem;max-width:560px;width:100%;margin:0 auto;gap:0.85rem}
 .progress-wrap{width:100%}
 .progress-top{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:0.45rem}
 .progress-bar-bg{width:100%;height:2px;background:var(--surface3);border-radius:99px;overflow:hidden}
 .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:99px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
 
-/* Card — bigger fonts */
-.card{width:100%;min-height:300px;background:var(--surface);border:1px solid var(--border);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.75rem 2rem;text-align:center;cursor:pointer;position:relative;transition:box-shadow 0.2s,transform 0.15s;user-select:none;overflow:hidden}
+/* deck active label */
+.deck-active-label{width:100%;padding:0.4rem 0.85rem;background:var(--accent-dim);border:1px solid var(--accent);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent);display:flex;align-items:center;justify-content:space-between}
+
+/* Card */
+.card{width:100%;min-height:300px;background:var(--surface);border:1px solid var(--border);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 2rem;text-align:center;cursor:pointer;position:relative;transition:box-shadow 0.2s,transform 0.15s;user-select:none;overflow:hidden}
 .card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(61,255,192,0.04) 0%,transparent 60%);pointer-events:none}
 .card:active{transform:scale(0.99)}
 .card-meta{position:absolute;top:1.1rem;left:0;right:0;padding:0 1.35rem;display:flex;align-items:center;justify-content:space-between}
 .card-category{font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
 .card-badge{font-size:0.58rem;padding:0.15rem 0.45rem;border-radius:99px;border:1px solid var(--border2);color:var(--text-muted);font-family:'JetBrains Mono',monospace}
 
-/* FRONT — bigger */
+/* FRONT */
 .card-front-content{display:flex;flex-direction:column;align-items:center;gap:0.6rem}
 .card-word{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,6.5vw,3.4rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em}
 .card-hint{font-size:0.82rem;color:var(--text-muted)}
 @keyframes breathe{0%,100%{opacity:0.5}50%{opacity:1}}
 .card-hint{animation:breathe 2.5s ease-in-out infinite}
-.kbd-hint{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--text-muted);opacity:0.5;margin-top:0.15rem}
+.kbd-hint{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--text-muted);opacity:0.5;margin-top:0.1rem}
 
-/* BACK — bigger */
-.card-back-content{display:none;flex-direction:column;align-items:center;gap:0.85rem;width:100%}
+/* BACK */
+.card-back-content{display:none;flex-direction:column;align-items:center;gap:0.8rem;width:100%}
 .card-back-content.visible{display:flex}
-.card-original{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:0.5rem}
+.card-original{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:0.5rem}
 .copy-btn{width:26px;height:26px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.68rem;color:var(--text-muted);transition:all 0.15s;flex-shrink:0}
 .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
 .copy-btn.copied{border-color:var(--green);color:var(--green);background:var(--green-dim)}
 .card-divider{width:40px;height:1px;background:var(--border2)}
-/* +50% from original 2.2rem → 3.3rem */
 .card-translation{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5.5vw,3.3rem);font-weight:900;color:var(--accent);letter-spacing:-0.02em;line-height:1.15}
 .card-phonetic{font-family:'JetBrains Mono',monospace;font-size:0.95rem;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(245,200,66,0.2);padding:0.4rem 0.9rem;border-radius:6px;letter-spacing:0.04em}
-
-/* Toggle hint */
-.toggle-hint{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--text-muted);opacity:0.6;margin-top:0.35rem}
+.toggle-hint{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--text-muted);opacity:0.55;margin-top:0.2rem}
 
 /* Rating */
 .rating-row{display:none;width:100%;gap:0.6rem}
 .rating-row.visible{display:grid;grid-template-columns:1fr 1fr 1fr}
 .rating-btn{padding:1rem 0.5rem;border:none;border-radius:13px;cursor:pointer;font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:0.3rem}
 .rating-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
-.rating-btn.flash{animation:flash-anim 0.25s ease}
-@keyframes flash-anim{0%,100%{filter:brightness(1)}50%{filter:brightness(1.4)}}
+.rating-btn.flash{animation:flash-btn 0.25s ease}
+@keyframes flash-btn{0%,100%{filter:brightness(1)}50%{filter:brightness(1.5)}}
 .rating-btn .days{font-family:'JetBrains Mono',monospace;font-size:0.62rem;opacity:0.75;font-weight:400}
 .btn-hard{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,112,112,0.2)}
 .btn-ok{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(245,200,66,0.2)}
 .btn-easy{background:var(--green-dim);color:var(--green);border:1px solid rgba(90,242,146,0.2)}
 
-/* Last 10 */
-.last-words-wrap{width:100%}
-.last-words-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.45rem}
-.last-words-title{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
-.last-words-scroll{max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:0.28rem;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+/* Last 10 — only on back */
+.last-words-wrap{width:100%;display:none}
+.last-words-wrap.visible{display:block}
+.last-words-header{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-bottom:0.4rem}
+.last-words-scroll{max-height:168px;overflow-y:auto;display:flex;flex-direction:column;gap:0.28rem;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 .last-words-scroll::-webkit-scrollbar{width:3px}
 .last-words-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
-.last-word-item{display:flex;align-items:center;gap:0.5rem;padding:0.42rem 0.7rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:0.76rem;cursor:pointer;transition:border-color 0.15s}
-.last-word-item:hover{border-color:var(--border2)}
+.last-word-item{display:grid;grid-template-columns:auto 1fr 1fr auto;align-items:center;gap:0.5rem;padding:0.42rem 0.7rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:border-color 0.15s}
+.last-word-item:hover{border-color:var(--accent)}
 .last-word-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dot-easy{background:var(--green)}
 .dot-ok{background:var(--yellow)}
 .dot-hard{background:var(--red)}
-.last-word-front{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.last-word-back{color:var(--text-muted);font-size:0.7rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.last-word-front{font-weight:600;font-size:0.76rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.last-word-back{color:var(--text-muted);font-size:0.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.last-word-review{font-size:0.65rem;color:var(--accent);font-family:'JetBrains Mono',monospace;white-space:nowrap;flex-shrink:0}
 
 .swipe-hint{display:none;width:100%;justify-content:space-between;font-size:0.68rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;padding:0 0.25rem}
 
-/* ══ DONE ══ */
-#screen-done{padding:2rem 1.25rem;max-width:440px;width:100%;margin:0 auto;justify-content:center;min-height:calc(100vh - 53px)}
-.done-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.25rem 1.75rem;text-align:center;width:100%}
-.done-icon{font-size:2.5rem;margin-bottom:0.85rem}
+/* ══ DONE (inside env-study) ══ */
+.done-wrap{display:none;flex-direction:column;align-items:center;width:100%;gap:1rem;padding-top:1rem}
+.done-wrap.visible{display:flex}
+.done-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:2.25rem 1.75rem;text-align:center;width:100%}
+
+/* SVG incentive illustration */
+.done-illustration{margin:0.5rem auto 1rem;display:block}
 .done-title{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;margin-bottom:0.4rem;letter-spacing:-0.02em}
-.done-sub{color:var(--text-muted);font-size:0.83rem;line-height:1.6;margin-bottom:1.4rem}
-.done-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-bottom:1.4rem}
+.done-message{color:var(--text-dim);font-size:0.92rem;line-height:1.65;margin-bottom:1.5rem;max-width:380px;margin-left:auto;margin-right:auto}
+.done-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.65rem;margin-bottom:1.5rem}
 .done-stat{background:var(--surface2);border-radius:12px;padding:0.9rem 0.4rem;border:1px solid var(--border)}
 .done-stat .val{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;display:block;line-height:1;margin-bottom:0.25rem}
-.done-stat .lbl{font-size:0.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.done-stat .lbl{font-size:0.63rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
 .done-stat.green .val{color:var(--green)}
 .done-stat.yellow .val{color:var(--yellow)}
 .done-stat.red .val{color:var(--red)}
 .done-actions{display:flex;flex-direction:column;gap:0.5rem}
+
+/* Buttons */
+.btn-primary{padding:0.9rem 1.75rem;background:var(--accent);color:#050e0b;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:0.4rem;justify-content:center}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 24px rgba(61,255,192,0.2)}
+.btn-ghost{padding:0.9rem 1.5rem;background:transparent;color:var(--text-dim);border:1px solid var(--border2);border-radius:11px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:500;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:0.4rem;justify-content:center}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:center}
@@ -232,45 +229,33 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 
 /* ══ MOBILE ══ */
 @media(max-width:600px){
-  header{padding:0.65rem 0.85rem;gap:0.5rem}
+  header{padding:0.65rem 0.85rem;gap:0.4rem}
   .logo{font-size:1.2rem}
   .logo-version{display:none}
-  .ctx-btn{font-size:0.68rem;padding:0.25rem 0.5rem}
+  .nav-btn{font-size:0.68rem;padding:0.28rem 0.55rem}
   .stat-pill{font-size:0.65rem}
 
-  #screen-welcome{padding:1.5rem 0.9rem}
-  .welcome-title{font-size:2rem}
-  .welcome-features{grid-template-columns:1fr;gap:0.45rem}
-  .feature-card{display:flex;align-items:center;gap:0.85rem;padding:0.85rem 1rem}
-  .feature-icon{margin-bottom:0;font-size:1.5rem;flex-shrink:0}
-  .welcome-cta{flex-direction:column}
-  .btn-primary,.btn-ghost{width:100%;justify-content:center}
-
-  #screen-library{padding:1.25rem 0.85rem}
+  #env-library{padding:1.1rem 0.85rem}
   .deck-grid{grid-template-columns:1fr}
 
-  #screen-upload{padding:1.25rem 0.85rem}
-  #screen-stats{padding:1.25rem 0.85rem}
+  #env-stats{padding:1.1rem 0.85rem}
   .stats-grid{grid-template-columns:1fr 1fr;gap:0.5rem}
   .lang-breakdown{grid-template-columns:1fr 1fr}
 
-  #screen-study{padding:0.85rem 0.75rem 1.25rem;gap:0.75rem}
-  .card{min-height:280px;padding:2.5rem 1.35rem;border-radius:18px;touch-action:pan-y}
+  #env-study{padding:0.85rem 0.75rem 1.25rem;gap:0.75rem}
+  .card{min-height:280px;padding:2.25rem 1.35rem;border-radius:18px;touch-action:pan-y}
   .card-word{font-size:2.5rem}
   .card-translation{font-size:2.4rem}
   .card-phonetic{font-size:1rem}
-  .card-original{font-size:1.35rem}
+  .card-original{font-size:1.3rem}
   .kbd-hint{display:none}
-
   .rating-btn{padding:1.15rem 0.4rem;min-height:70px;border-radius:14px;font-size:0.9rem}
   .swipe-hint{display:flex;font-size:0.7rem}
-  .last-words-scroll{max-height:140px}
-  .last-word-item{font-size:0.72rem}
-
+  .lang-direction{grid-template-columns:1fr}
   .done-card{padding:1.75rem 1.1rem}
-  .done-title{font-size:1.6rem}
+  .done-title{font-size:1.55rem}
   .done-stat .val{font-size:1.75rem}
-  .done-actions .btn-primary,.done-actions .btn-ghost{width:100%;justify-content:center}
+  .done-actions .btn-primary,.done-actions .btn-ghost{width:100%}
 }
 @media(max-width:600px) and (orientation:landscape){.card{min-height:190px}}
 </style>
@@ -278,51 +263,37 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 <body>
 
 <header>
-  <div class="header-left">
-    <div class="logo" onclick="goWelcome()">LexiPro</div>
-    <div class="logo-version">v3.2</div>
+  <div style="display:flex;align-items:baseline;gap:0.45rem;cursor:pointer" onclick="showEnv('library')">
+    <div class="logo">LexiPro</div>
+    <div class="logo-version">v4.0</div>
   </div>
 
-  <!-- Context nav — updated per screen -->
-  <div class="ctx-nav" id="ctx-nav">
-    <button class="ctx-btn active" onclick="goWelcome()">🏠 Início</button>
-    <span class="ctx-sep">›</span>
-    <button class="ctx-btn" onclick="goLibrary()">📚 Biblioteca</button>
-    <span class="ctx-sep">›</span>
-    <button class="ctx-btn" onclick="goStats()">📊 Stats</button>
-  </div>
+  <nav class="main-nav">
+    <button class="nav-btn active" id="nav-library" onclick="showEnv('library')">📚 Biblioteca</button>
+    <button class="nav-btn" id="nav-stats" onclick="showEnv('stats')">📊 Métricas</button>
+    <button class="nav-btn" id="nav-study" onclick="showEnv('study')">⚡ Flashcard</button>
+  </nav>
 
   <div class="header-right">
-    <div class="stat-pill" onclick="goStats()">🔥 <strong id="hdr-due">0</strong></div>
+    <div class="stat-pill" onclick="showEnv('stats')">🔥 <strong id="hdr-due">0</strong></div>
     <div id="auth-bar"></div>
   </div>
 </header>
 
 <main>
 
-<!-- ══ WELCOME ══ -->
-<div class="screen active" id="screen-welcome">
-  <div class="welcome-bg"></div>
-  <div class="welcome-content">
-    <div class="welcome-eyebrow">Método de Repetição Espaçada</div>
-    <h1 class="welcome-title">Domine o vocabulário<br>de negócios em <em>inglês</em><br>e <em>espanhol.</em></h1>
-    <p class="welcome-sub">Estude apenas o que você está prestes a esquecer. O LexiPro agenda cada revisão no momento exato para maximizar a retenção com o mínimo de esforço.</p>
-    <div class="welcome-features">
-      <div class="feature-card"><div class="feature-icon">🧠</div><div><div class="feature-title">Repetição Espaçada</div><div class="feature-desc">Algoritmo SM-2 — revisões no momento certo para fixar na memória</div></div></div>
-      <div class="feature-card"><div class="feature-icon">🔊</div><div><div class="feature-title">Fonética Prática</div><div class="feature-desc">Pronúncia em português para cada termo</div></div></div>
-      <div class="feature-card"><div class="feature-icon">📊</div><div><div class="feature-title">Evolução Visual</div><div class="feature-desc">Acompanhe seu progresso histórico por idioma</div></div></div>
-    </div>
-    <div class="welcome-cta">
-      <button class="btn-primary" onclick="goLibrary()">📚 Minha Biblioteca →</button>
-      <button class="btn-ghost" onclick="goStats()">📊 Estatísticas</button>
-      <button class="btn-ghost" onclick="runDemo()">▶ Demo</button>
-    </div>
+<!-- ══ ENV 1 — BIBLIOTECA ══ -->
+<div class="env active" id="env-library">
+  <div class="lib-header">
+    <div class="lib-title">Minha Biblioteca</div>
+    <button class="btn-ghost" onclick="openUpload()" style="padding:0.5rem 1rem;font-size:0.82rem">＋ Adicionar deck</button>
   </div>
+  <div class="deck-grid" id="deck-grid"></div>
 </div>
 
-<!-- ══ STATS ══ -->
-<div class="screen" id="screen-stats">
-  <div class="section-title">Estatísticas</div>
+<!-- ══ ENV 2 — MÉTRICAS ══ -->
+<div class="env" id="env-stats">
+  <div class="stats-title">Estatísticas</div>
   <div class="stats-grid">
     <div class="stats-box accent"><span class="val" id="st-total">0</span><span class="lbl">Total estudadas</span></div>
     <div class="stats-box green"><span class="val" id="st-streak">0</span><span class="lbl">Dias seguidos</span></div>
@@ -334,119 +305,131 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
     <div style="display:flex;gap:1rem;margin-top:0.6rem;font-size:0.62rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace">
       <span style="display:flex;align-items:center;gap:0.3rem"><span style="width:9px;height:9px;background:var(--accent);border-radius:2px;display:inline-block"></span>EN→PT</span>
       <span style="display:flex;align-items:center;gap:0.3rem"><span style="width:9px;height:9px;background:var(--blue);border-radius:2px;display:inline-block"></span>ES→PT</span>
+      <span style="display:flex;align-items:center;gap:0.3rem"><span style="width:9px;height:9px;background:var(--yellow);border-radius:2px;display:inline-block"></span>ZH→PT</span>
     </div>
   </div>
   <div class="lang-breakdown">
     <div class="lang-stat"><div class="lang-flag">🇺🇸</div><div><div class="lang-name">Inglês → PT</div><div class="lang-count"><span id="st-en">0</span> palavras</div></div></div>
     <div class="lang-stat"><div class="lang-flag">🇪🇸</div><div><div class="lang-name">Espanhol → PT</div><div class="lang-count"><span id="st-es">0</span> palavras</div></div></div>
+    <div class="lang-stat"><div class="lang-flag">🇨🇳</div><div><div class="lang-name">Mandarim → PT</div><div class="lang-count"><span id="st-zh">0</span> palavras</div></div></div>
   </div>
 </div>
 
-<!-- ══ LIBRARY ══ -->
-<div class="screen" id="screen-library">
-  <div class="library-header">
-    <div class="section-title">Minha Biblioteca</div>
-  </div>
-  <div class="deck-grid" id="deck-grid">
-    <!-- populated by JS -->
-  </div>
-  <div class="library-start" id="library-start" style="display:none">
-    <button class="btn-primary" id="btn-start" onclick="startSession()" style="flex:1;justify-content:center">Iniciar sessão →</button>
-  </div>
-</div>
+<!-- ══ ENV 3 — FLASHCARD ══ -->
+<div class="env" id="env-study">
 
-<!-- ══ UPLOAD ══ -->
-<div class="screen" id="screen-upload">
-  <div class="section-title">Adicionar Deck</div>
-  <div class="upload-card">
-    <span class="field-label">1. Idioma do deck</span>
-    <div class="lang-direction">
-      <button class="lang-btn selected" onclick="selectLang('en-pt',this)">🇺🇸 Inglês → Português</button>
-      <button class="lang-btn" onclick="selectLang('es-pt',this)">🇪🇸 Espanhol → Português</button>
-      <button class="lang-btn" onclick="selectLang('zh-pt',this)" style="grid-column:1/-1">🇨🇳 Mandarim → Português</button>
-    </div>
-    <span class="field-label">2. Arquivo CSV</span>
-    <div class="upload-area" id="upload-area">
-      <input type="file" accept=".csv" id="csv-input" onchange="handleFile(this)">
-      <div class="upload-icon">📂</div>
-      <div class="upload-title">Arraste ou toque para selecionar</div>
-      <div class="upload-sub">Formato: <strong>CSV separado por ponto-e-vírgula (;)</strong></div>
-      <div class="upload-name" id="file-name" style="display:none"></div>
-    </div>
-    <div class="upload-hint"><strong>Estrutura esperada:</strong><br>ID ; Termo ; Tradução ; Categoria ; Fonética</div>
-  </div>
-</div>
-
-<!-- ══ STUDY ══ -->
-<div class="screen" id="screen-study">
-  <div class="progress-wrap">
-    <div class="progress-top">
-      <span id="sess-progress">0 / 0</span>
-      <span id="sess-new">🆕 0 novos</span>
-    </div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+  <!-- No deck selected -->
+  <div class="no-deck-msg" id="no-deck-msg">
+    <div class="icon">📚</div>
+    <div class="title">Nenhum deck selecionado</div>
+    <div class="sub">Vá à Biblioteca, escolha um deck e clique em <strong>▶ Estudar</strong> para começar.</div>
+    <button class="btn-primary" onclick="showEnv('library')">← Ir à Biblioteca</button>
   </div>
 
-  <div class="card" id="study-card" onclick="handleCardClick()">
-    <div class="card-meta">
-      <span class="card-category" id="card-cat"></span>
-      <span class="card-badge" id="card-badge"></span>
+  <!-- Study area -->
+  <div id="study-area" style="display:none;width:100%;display:flex;flex-direction:column;align-items:center;gap:0.85rem">
+
+    <div class="deck-active-label" id="deck-active-label">
+      <span id="deck-active-name">—</span>
+      <span id="deck-active-due" style="opacity:0.7"></span>
     </div>
-    <div class="card-front-content" id="card-front-wrap">
-      <div class="card-word" id="card-front"></div>
-      <div class="card-hint">toque para revelar</div>
-      <div class="kbd-hint">→ revelar &nbsp;·&nbsp; ← / → / 1 2 3 avaliar</div>
-    </div>
-    <div class="card-back-content" id="card-answer">
-      <div class="card-original">
-        <span id="card-original"></span>
-        <button class="copy-btn" id="copy-btn" onclick="event.stopPropagation();copyWord()" title="Copiar">⎘</button>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span id="sess-progress">0 / 0</span>
+        <span id="sess-new">🆕 0 novos</span>
       </div>
-      <div class="card-divider"></div>
-      <div class="card-translation" id="card-back"></div>
-      <div class="card-phonetic" id="card-phonetic"></div>
-      <div class="toggle-hint">← voltar à palavra &nbsp;·&nbsp; → / 1 2 3 avaliar</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="card" id="study-card" onclick="handleCardClick()">
+      <div class="card-meta">
+        <span class="card-category" id="card-cat"></span>
+        <span class="card-badge" id="card-badge"></span>
+      </div>
+      <!-- FRONT -->
+      <div class="card-front-content" id="card-front-wrap">
+        <div class="card-word" id="card-front"></div>
+        <div class="card-hint">toque para revelar</div>
+        <div class="kbd-hint">→ revelar · ← voltar</div>
+      </div>
+      <!-- BACK -->
+      <div class="card-back-content" id="card-answer">
+        <div class="card-original">
+          <span id="card-original"></span>
+          <button class="copy-btn" id="copy-btn" onclick="event.stopPropagation();copyWord()" title="Copiar">⎘</button>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-translation" id="card-back"></div>
+        <div class="card-phonetic" id="card-phonetic"></div>
+        <div class="toggle-hint">← voltar à palavra</div>
+      </div>
+    </div>
+
+    <!-- Rating -->
+    <div class="rating-row" id="rating-row">
+      <button class="rating-btn btn-hard" id="btn-hard" onclick="rate(0)">😓 Difícil<span class="days" id="days-hard">10 min</span></button>
+      <button class="rating-btn btn-ok" id="btn-ok" onclick="rate(1)">🤔 Lembrei<span class="days" id="days-ok">1 dia</span></button>
+      <button class="rating-btn btn-easy" id="btn-easy" onclick="rate(2)">✅ Fácil<span class="days" id="days-easy">4 dias</span></button>
+    </div>
+
+    <div class="swipe-hint" id="swipe-hint" style="display:none"><span>👈 Difícil</span><span>Fácil 👉</span></div>
+
+    <!-- Last 10 — only visible on back -->
+    <div class="last-words-wrap" id="last-words-wrap">
+      <div class="last-words-header">Últimas estudadas — clique para rever</div>
+      <div class="last-words-scroll" id="last-words-list"></div>
+    </div>
+
+  </div>
+
+  <!-- Done screen (inside env-study) -->
+  <div class="done-wrap" id="done-wrap">
+    <div class="done-card">
+      <div id="done-illustration"></div>
+      <div class="done-title" id="done-title">Sessão concluída!</div>
+      <div class="done-message" id="done-message"></div>
+      <div class="done-stats">
+        <div class="done-stat green"><span class="val" id="done-easy">0</span><span class="lbl">Fácil</span></div>
+        <div class="done-stat yellow"><span class="val" id="done-ok">0</span><span class="lbl">Lembrei</span></div>
+        <div class="done-stat red"><span class="val" id="done-hard">0</span><span class="lbl">Difícil</span></div>
+      </div>
+      <div class="done-actions">
+        <button class="btn-primary" onclick="restartSession()" style="width:100%">Revisar novamente →</button>
+        <button class="btn-ghost" onclick="showEnv('library')" style="width:100%">← Biblioteca</button>
+      </div>
     </div>
   </div>
 
-  <div class="rating-row" id="rating-row">
-    <button class="rating-btn btn-hard" id="btn-hard" onclick="rate(0)">😓 Difícil<span class="days" id="days-hard">10 min</span></button>
-    <button class="rating-btn btn-ok" id="btn-ok" onclick="rate(1)">🤔 Lembrei<span class="days" id="days-ok">1 dia</span></button>
-    <button class="rating-btn btn-easy" id="btn-easy" onclick="rate(2)">✅ Fácil<span class="days" id="days-easy">4 dias</span></button>
-  </div>
-
-  <div class="swipe-hint" id="swipe-hint" style="display:none"><span>👈 Difícil</span><span>Fácil 👉</span></div>
-
-  <div class="last-words-wrap" id="last-words-wrap" style="display:none">
-    <div class="last-words-header">
-      <div class="last-words-title">Últimas 10 palavras estudadas</div>
-    </div>
-    <div class="last-words-scroll" id="last-words-list"></div>
-  </div>
-</div>
-
-<!-- ══ DONE ══ -->
-<div class="screen" id="screen-done">
-  <div class="done-card">
-    <div class="done-icon">🎯</div>
-    <div class="done-title" id="done-title">Sessão concluída!</div>
-    <div class="done-sub" id="done-sub">O sistema agendou sua próxima revisão automaticamente.</div>
-    <div class="done-stats">
-      <div class="done-stat green"><span class="val" id="done-easy">0</span><span class="lbl">Fácil</span></div>
-      <div class="done-stat yellow"><span class="val" id="done-ok">0</span><span class="lbl">Lembrei</span></div>
-      <div class="done-stat red"><span class="val" id="done-hard">0</span><span class="lbl">Difícil</span></div>
-    </div>
-    <div class="done-actions">
-      <button class="btn-primary" onclick="startSession()" style="width:100%;justify-content:center">Revisar novamente →</button>
-      <button class="btn-ghost" onclick="goLibrary()" style="width:100%;justify-content:center">← Biblioteca</button>
-    </div>
-  </div>
 </div>
 
 </main>
 
+<!-- Upload Modal -->
+<div class="modal-overlay" id="upload-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeUpload()">✕</button>
+    <div class="modal-title">Adicionar Deck</div>
+    <span class="field-label">1. Idioma do deck</span>
+    <div class="lang-direction" style="margin-top:0.5rem">
+      <button class="lang-btn selected" onclick="selectLang('en-pt',this)">🇺🇸 EN→PT</button>
+      <button class="lang-btn" onclick="selectLang('es-pt',this)">🇪🇸 ES→PT</button>
+      <button class="lang-btn" onclick="selectLang('zh-pt',this)">🇨🇳 ZH→PT</button>
+    </div>
+    <span class="field-label" style="margin-top:0.5rem">2. Arquivo CSV</span>
+    <div class="upload-area" id="upload-area" style="margin-top:0.5rem">
+      <input type="file" accept=".csv" id="csv-input" onchange="handleFile(this)">
+      <div class="upload-icon">📂</div>
+      <div class="upload-title">Arraste ou toque para selecionar</div>
+      <div class="upload-sub">Separado por <strong>ponto-e-vírgula (;)</strong></div>
+      <div class="upload-name" id="file-name" style="display:none"></div>
+    </div>
+    <div class="upload-hint"><strong>Estrutura:</strong> ID ; Termo ; Tradução ; Categoria ; Fonética</div>
+  </div>
+</div>
+
 <footer>
-  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v3.2</div>
+  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v4.0</div>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -473,59 +456,99 @@ function renderAuthUI(user){
 
 onAuthStateChanged(auth,async user=>{
   currentUser=user;renderAuthUI(user);
-  if(user){
-    try{const snap=await get(child(ref(db),`users/${user.uid}/srs`));if(snap.exists())Object.entries(snap.val()).forEach(([k,v])=>localStorage.setItem('lp_'+k,JSON.stringify(v)));}catch(e){}
-    updateHeaderStats();
-  }
+  if(user){try{const snap=await get(child(ref(db),`users/${user.uid}/srs`));if(snap.exists())Object.entries(snap.val()).forEach(([k,v])=>localStorage.setItem('lp_'+k,JSON.stringify(v)));}catch(e){}}
 });
 
 async function saveSRSRemote(id,data){if(!currentUser)return;try{await set(ref(db,`users/${currentUser.uid}/srs/${id.replace(/[.#$\[\]]/g,'_')}`),data);}catch(e){}}
 
-// STATE
+// ══ STATE ══
 let allCards=[],sessionQueue=[],currentCard=null,sessionIdx=0,revealed=false,lang='en-pt';
 let sessionStats={easy:0,ok:0,hard:0};let lastWords=[];let activeCategory='';
-let activeDeckName='';
+let activeDeckName='';let reviewCard=null;
 const SESSION_SIZE=30;
 
-// STATS
+// ══ ENV NAVIGATION ══
+function showEnv(name){
+  document.querySelectorAll('.env').forEach(e=>e.classList.remove('active'));
+  document.getElementById('env-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='stats')renderStats();
+  if(name==='library')renderLibrary();
+  if(name==='study')initStudyEnv();
+}
+window.showEnv=showEnv;
+
+function initStudyEnv(){
+  if(!activeDeckName||!allCards.length){
+    document.getElementById('no-deck-msg').style.display='block';
+    document.getElementById('study-area').style.display='none';
+    document.getElementById('done-wrap').classList.remove('visible');
+    return;
+  }
+  document.getElementById('no-deck-msg').style.display='none';
+  document.getElementById('study-area').style.display='flex';
+  document.getElementById('done-wrap').classList.remove('visible');
+  // Update label
+  const lbl=document.getElementById('deck-active-label');
+  if(lbl){
+    document.getElementById('deck-active-name').textContent=activeDeckName+(activeCategory?' · '+activeCategory:'');
+    document.getElementById('deck-active-due').textContent=allCards.filter(c=>isDue(c.id)).length+' para revisar';
+  }
+  // If session not started yet or done, start fresh
+  if(sessionIdx===0||sessionIdx>=sessionQueue.length){
+    startSession();
+  }
+}
+
+// ══ UPLOAD ══
+function openUpload(){document.getElementById('upload-modal').classList.add('open');}
+function closeUpload(){document.getElementById('upload-modal').classList.remove('open');}
+window.openUpload=openUpload;window.closeUpload=closeUpload;
+
+// ══ STATS ══
 function getStudyLog(){try{return JSON.parse(localStorage.getItem('lp_study_log')||'{}');}catch(e){return{};}}
 function logStudied(cardLang){
   const log=getStudyLog();const today=new Date().toISOString().slice(0,10);
-  if(!log[today])log[today]={en:0,es:0};
-  if(cardLang.startsWith('en'))log[today].en++;else log[today].es++;
+  if(!log[today])log[today]={en:0,es:0,zh:0};
+  if(cardLang.startsWith('en'))log[today].en++;
+  else if(cardLang.startsWith('es'))log[today].es++;
+  else log[today].zh=(log[today].zh||0)+1;
   localStorage.setItem('lp_study_log',JSON.stringify(log));
 }
 function computeStats(){
-  const log=getStudyLog();let totalEn=0,totalEs=0,streak=0;
+  const log=getStudyLog();let totalEn=0,totalEs=0,totalZh=0,streak=0;
   const todayStr=new Date().toISOString().slice(0,10);
-  Object.values(log).forEach(d=>{totalEn+=d.en||0;totalEs+=d.es||0;});
+  Object.values(log).forEach(d=>{totalEn+=d.en||0;totalEs+=d.es||0;totalZh+=d.zh||0;});
   let d=new Date();
-  while(true){const ds=d.toISOString().slice(0,10);const e=log[ds];if(e&&((e.en||0)+(e.es||0))>0){streak++;d.setDate(d.getDate()-1);}else break;}
-  const today=(log[todayStr]?(log[todayStr].en||0)+(log[todayStr].es||0):0);
-  return{totalEn,totalEs,total:totalEn+totalEs,streak,today,log};
+  while(true){const ds=d.toISOString().slice(0,10);const e=log[ds];if(e&&((e.en||0)+(e.es||0)+(e.zh||0))>0){streak++;d.setDate(d.getDate()-1);}else break;}
+  const today=log[todayStr]?(log[todayStr].en||0)+(log[todayStr].es||0)+(log[todayStr].zh||0):0;
+  return{totalEn,totalEs,totalZh,total:totalEn+totalEs+totalZh,streak,today,log};
 }
 function renderStats(){
-  const{totalEn,totalEs,total,streak,today,log}=computeStats();
+  const{totalEn,totalEs,totalZh,total,streak,today,log}=computeStats();
   document.getElementById('st-total').textContent=total.toLocaleString('pt-BR');
   document.getElementById('st-streak').textContent=streak;
   document.getElementById('st-today').textContent=today;
   document.getElementById('st-en').textContent=totalEn.toLocaleString('pt-BR');
   document.getElementById('st-es').textContent=totalEs.toLocaleString('pt-BR');
+  document.getElementById('st-zh').textContent=totalZh.toLocaleString('pt-BR');
   const chart=document.getElementById('weekly-chart');chart.innerHTML='';
   const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
-  const maxVal=Math.max(1,...days7.map(d=>log[d]?(log[d].en||0)+(log[d].es||0):0));
+  const maxVal=Math.max(1,...days7.map(d=>log[d]?(log[d].en||0)+(log[d].es||0)+(log[d].zh||0):0));
   const dayL=['D','S','T','Q','Q','S','S'];const todayStr=new Date().toISOString().slice(0,10);
   days7.forEach(ds=>{
-    const e=log[ds]||{en:0,es:0};const tot=(e.en||0)+(e.es||0);
-    const enH=Math.round((e.en||0)/maxVal*64);const esH=Math.round((e.es||0)/maxVal*64);
+    const e=log[ds]||{en:0,es:0,zh:0};const tot=(e.en||0)+(e.es||0)+(e.zh||0);
+    const enH=Math.round((e.en||0)/maxVal*64);const esH=Math.round((e.es||0)/maxVal*64);const zhH=Math.round((e.zh||0)/maxVal*64);
     const d=new Date(ds+'T12:00:00');const lbl=dayL[d.getDay()];const isT=ds===todayStr;
     const wrap=document.createElement('div');wrap.className='bar-wrap';
-    wrap.innerHTML=`<div style="position:relative;width:100%;display:flex;flex-direction:column;align-items:center;gap:1px">${tot>0?`<span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--text-muted)">${tot}</span>`:''}<div style="width:100%;height:${enH}px;background:var(--accent-dim);border-radius:3px 3px 0 0;${enH>0?'border-top:2px solid var(--accent)':''};min-height:${enH>0?2:0}px"></div><div style="width:100%;height:${esH}px;background:var(--blue-dim);${esH>0?'border-top:2px solid var(--blue)':''};min-height:${esH>0?2:0}px"></div>${enH===0&&esH===0?`<div style="width:100%;height:2px;background:var(--border)"></div>`:''}</div><div class="bar-label" style="color:${isT?'var(--accent)':'var(--text-muted)'};font-weight:${isT?700:400}">${lbl}</div>`;
+    wrap.innerHTML=`<div style="position:relative;width:100%;display:flex;flex-direction:column;align-items:center;gap:1px">${tot>0?`<span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:var(--text-muted)">${tot}</span>`:''}<div style="width:100%;height:${enH}px;background:var(--accent-dim);${enH>0?'border-top:2px solid var(--accent)':''};min-height:${enH>0?2:0}px;border-radius:3px 3px 0 0"></div><div style="width:100%;height:${esH}px;background:var(--blue-dim);${esH>0?'border-top:2px solid var(--blue)':''};min-height:${esH>0?2:0}px"></div><div style="width:100%;height:${zhH}px;background:var(--yellow-dim);${zhH>0?'border-top:2px solid var(--yellow)':''};min-height:${zhH>0?2:0}px"></div>${tot===0?`<div style="width:100%;height:2px;background:var(--border)"></div>`:''}</div><div class="bar-label" style="color:${isT?'var(--accent)':'var(--text-muted)'};font-weight:${isT?700:400}">${lbl}</div>`;
     chart.appendChild(wrap);
   });
 }
 
-// DECKS
+// ══ DECKS ══
 function getDecks(){try{return JSON.parse(localStorage.getItem('lp_decks')||'[]');}catch(e){return[];}}
 function saveDecks(d){localStorage.setItem('lp_decks',JSON.stringify(d));}
 function addDeck(name,cards,deckLang){
@@ -536,74 +559,71 @@ function addDeck(name,cards,deckLang){
   saveDecks(decks);localStorage.setItem('lp_cards_'+name,JSON.stringify(cards));
 }
 function loadDeckCards(name){try{return JSON.parse(localStorage.getItem('lp_cards_'+name)||'[]');}catch(e){return[];}}
-
-function getDueCount(cards){return cards.filter(c=>getSRSData(c.id).due<=Date.now()).length;}
+function isDue(id){return getSRSData(id).due<=Date.now();}
+function getDueCount(cards){return cards.filter(c=>isDue(c.id)).length;}
 
 window.startDeck=function(name){
   const cards=loadDeckCards(name);const deck=getDecks().find(d=>d.name===name);
   if(!cards.length||!deck)return;
-  allCards=cards;lang=deck.lang;activeCategory='';activeDeckName=name;
+  allCards=cards;lang=deck.lang;activeCategory='';activeDeckName=name;sessionIdx=0;
   localStorage.setItem('lp_active_deck',name);
-  updateHeaderStats();startSession();
+  updateHeaderStats();
+  showEnv('study');
 };
 
-window.selectCategoryFilter=function(deckName,cat,chip){
-  const chips=chip.closest('.deck-cats').querySelectorAll('.cat-chip');
+window.selectCatFilter=function(deckName,cat,chip){
   const wasActive=chip.classList.contains('active');
-  chips.forEach(c=>c.classList.remove('active'));
-  if(!wasActive){chip.classList.add('active');activeCategory=cat;}
-  else activeCategory='';
+  chip.closest('.deck-cats').querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
+  activeCategory=wasActive?'':cat;
+  if(!wasActive)chip.classList.add('active');
   const all=loadDeckCards(deckName);
   allCards=activeCategory?all.filter(c=>c.category===activeCategory):all;
   activeDeckName=deckName;
-  const deck=getDecks().find(d=>d.name===deckName);
-  if(deck)lang=deck.lang;
+  const deck=getDecks().find(d=>d.name===deckName);if(deck)lang=deck.lang;
   localStorage.setItem('lp_active_deck',deckName);
-  updateHeaderStats();
-  const startWrap=document.getElementById('library-start');
-  if(startWrap)startWrap.style.display='flex';
-  document.getElementById('btn-start').disabled=false;
+  sessionIdx=0;updateHeaderStats();
   toast(activeCategory?`${allCards.length} cards de "${activeCategory}"`:'Todas as categorias');
 };
 
 window.removeDeckConfirm=function(name){
   if(!confirm(`Remover o deck "${name}"?\n\nApagará o deck e o progresso associado.`))return;
   let decks=getDecks().filter(d=>d.name!==name);saveDecks(decks);localStorage.removeItem('lp_cards_'+name);
-  if(localStorage.getItem('lp_active_deck')===name){localStorage.removeItem('lp_active_deck');allCards=[];document.getElementById('btn-start').disabled=true;}
+  if(activeDeckName===name){activeDeckName='';allCards=[];localStorage.removeItem('lp_active_deck');}
   toast('Deck removido');renderLibrary();updateHeaderStats();
 };
 
+function esc(s){return String(s).replace(/'/g,"\\'");}
+
 function renderLibrary(){
   const decks=getDecks();const grid=document.getElementById('deck-grid');
-  const flagMap={'en-pt':'🇺🇸','es-pt':'🇪🇸','zh-pt':'🇨🇳'};const labelMap={'en-pt':'EN → PT','es-pt':'ES → PT','zh-pt':'ZH → PT'};
+  const flagMap={'en-pt':'🇺🇸','es-pt':'🇪🇸','zh-pt':'🇨🇳'};
+  const labelMap={'en-pt':'EN → PT','es-pt':'ES → PT','zh-pt':'ZH → PT'};
   grid.innerHTML='';
   decks.forEach(d=>{
-    const cards=loadDeckCards(d.name);
-    const due=getDueCount(cards);
-    const card=document.createElement('div');
-    card.className='deck-card';
-    card.innerHTML=`
-      <div class="deck-card-flag">${flagMap[d.lang]||'📚'}</div>
-      <div class="deck-card-name">${d.name}</div>
-      <div class="deck-card-meta">${d.count} cards · ${labelMap[d.lang]||d.lang}</div>
-      <div class="deck-card-due ${due===0?'zero':''}">🔥 ${due} para revisar hoje</div>
-      ${d.categories?.length?`<div class="deck-cats">${d.categories.map(cat=>`<div class="cat-chip" onclick="event.stopPropagation();selectCategoryFilter('${esc(d.name)}','${esc(cat)}',this)">${cat}</div>`).join('')}</div>`:''}
-      <div class="deck-card-actions">
-        <button class="deck-action-btn primary" onclick="startDeck('${esc(d.name)}')">▶ Estudar</button>
-        <button class="deck-action-btn danger" onclick="removeDeckConfirm('${esc(d.name)}')">✕ Remover</button>
+    const cards=loadDeckCards(d.name);const due=getDueCount(cards);
+    const isSelected=activeDeckName===d.name;
+    const el=document.createElement('div');
+    el.className='deck-card'+(isSelected?' selected':'');
+    el.innerHTML=`
+      <div class="deck-flag">${flagMap[d.lang]||'📚'}</div>
+      <div class="deck-filename">${d.name}</div>
+      <div class="deck-lang">${labelMap[d.lang]||d.lang} · ${d.count} cards</div>
+      <div class="deck-due ${due===0?'zero':''}">${due===0?'✓ Tudo em dia':'🔥 '+due+' para revisar hoje'}</div>
+      ${d.categories?.length?`<div class="deck-cats">${d.categories.map(cat=>`<span class="cat-chip ${activeCategory===cat&&isSelected?'active':''}" onclick="event.stopPropagation();selectCatFilter('${esc(d.name)}','${esc(cat)}',this)">${cat}</span>`).join('')}</div>`:''}
+      <div class="deck-actions">
+        <button class="deck-btn go" onclick="startDeck('${esc(d.name)}')">▶ Estudar</button>
+        <button class="deck-btn del" onclick="removeDeckConfirm('${esc(d.name)}')">✕ Remover</button>
       </div>`;
-    grid.appendChild(card);
+    grid.appendChild(el);
   });
-  // Add deck card
+  // Add card
   const add=document.createElement('div');add.className='add-deck-card';
-  add.onclick=()=>goUpload();
+  add.onclick=openUpload;
   add.innerHTML=`<div class="add-deck-icon">＋</div><div class="add-deck-label">Adicionar novo deck</div>`;
   grid.appendChild(add);
 }
 
-function esc(s){return String(s).replace(/'/g,"\\'");}
-
-// SRS
+// ══ SRS ══
 function getSRSData(id){try{return JSON.parse(localStorage.getItem('lp_'+id)||'null')||{interval:0,ef:2.5,due:0,reps:0};}catch(e){return{interval:0,ef:2.5,due:0,reps:0};}}
 function saveSRS(id,data){localStorage.setItem('lp_'+id,JSON.stringify(data));saveSRSRemote(id,data);}
 function updateSRS(id,q){
@@ -612,7 +632,6 @@ function updateSRS(id,q){
   else{d.ef=Math.max(1.3,d.ef+(0.1-(2-q)*(0.08+(2-q)*0.02)));if(d.reps===0)d.interval=1;else if(d.reps===1)d.interval=4;else d.interval=Math.round(d.interval*d.ef);d.due=now+d.interval*24*60*60*1000;d.reps++;}
   saveSRS(id,d);return d;
 }
-function isDue(id){return getSRSData(id).due<=Date.now();}
 function getNextInterval(id,q){
   const d=getSRSData(id);if(q===0)return '10 min';
   const ef=Math.max(1.3,d.ef+(0.1-(2-q)*(0.08+(2-q)*0.02)));
@@ -620,7 +639,7 @@ function getNextInterval(id,q){
   return i===1?'1 dia':`${i} dias`;
 }
 
-// CSV
+// ══ CSV ══
 function parseCSV(text,deckLang){
   const lines=text.trim().split('\n');const cards=[];let start=0;
   const f=lines[0].toLowerCase();
@@ -639,7 +658,6 @@ function parseCSV(text,deckLang){
   return cards;
 }
 
-// FILE
 function handleFile(input){
   const file=input.files[0];if(!file)return;
   const fn=document.getElementById('file-name');
@@ -648,24 +666,16 @@ function handleFile(input){
     const cards=parseCSV(e.target.result,lang);
     if(!cards.length){toast('Nenhum card encontrado.');return;}
     const name=file.name.replace(/\.[^/.]+$/,'');
-    addDeck(name,cards,lang);allCards=cards;activeDeckName=name;
-    localStorage.setItem('lp_active_deck',name);
+    addDeck(name,cards,lang);
     fn.textContent='✓ '+file.name;fn.style.display='inline-block';
     input.value='';updateHeaderStats();
     toast(`${cards.length} cards adicionados!`);
-    setTimeout(()=>{fn.style.display='none';goLibrary();},1500);
+    setTimeout(()=>{fn.style.display='none';closeUpload();renderLibrary();},1500);
   };
   reader.readAsText(file,'UTF-8');
 }
 
-// DEMO
-function runDemo(){
-  const demo=[{id:'demo_1',front:'cash flow',back:'fluxo de caixa',category:'Finanças',phonetic:'kash flo'},{id:'demo_2',front:'budget',back:'orçamento',category:'Finanças',phonetic:'BAJ-et'},{id:'demo_3',front:'accounts payable',back:'contas a pagar',category:'Contábil',phonetic:'a-KAUNTS PEY-a-bl'},{id:'demo_4',front:'revenue',back:'receita',category:'Finanças',phonetic:'REV-e-nyu'},{id:'demo_5',front:'ebitda',back:'LAJIDA',category:'Finanças',phonetic:'ee-bee-ai-tee-dee-ey'},{id:'demo_6',front:'stakeholder',back:'parte interessada',category:'Gestão',phonetic:'STEYK-hol-der'},{id:'demo_7',front:'milestone',back:'marco / etapa',category:'Gestão',phonetic:'MAIL-ston'},{id:'demo_8',front:'procurement',back:'aquisição / compras',category:'Compras',phonetic:'pro-KYUR-ment'},{id:'demo_9',front:'withholding tax',back:'imposto retido na fonte',category:'Fiscal',phonetic:'with-HOL-ding taks'},{id:'demo_10',front:'reconciliation',back:'conciliação',category:'Contábil',phonetic:'rek-on-sil-i-EY-shon'}];
-  addDeck('Demo EN→PT',demo,'en-pt');allCards=demo;lang='en-pt';activeDeckName='Demo EN→PT';
-  localStorage.setItem('lp_active_deck','Demo EN→PT');updateHeaderStats();startSession();
-}
-
-// SESSION
+// ══ SESSION ══
 function buildQueue(){
   const due=allCards.filter(c=>isDue(c.id));
   const nw=due.filter(c=>getSRSData(c.id).reps===0);const rv=due.filter(c=>getSRSData(c.id).reps>0);
@@ -674,24 +684,25 @@ function buildQueue(){
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
 
 function startSession(){
-  if(!allCards.length){toast('Selecione um deck primeiro');goLibrary();return;}
   sessionStats={easy:0,ok:0,hard:0};lastWords=[];
   sessionQueue=buildQueue();sessionIdx=0;
-  if(!sessionQueue.length){
-    const nd=allCards.map(c=>getSRSData(c.id).due).filter(d=>d>Date.now()).sort()[0];
-    const mins=nd?Math.round((nd-Date.now())/60000):null;
-    document.getElementById('done-easy').textContent='🎉';
-    document.getElementById('done-ok').textContent='';document.getElementById('done-hard').textContent='';
-    document.getElementById('done-title').textContent='Tudo em dia!';
-    document.getElementById('done-sub').textContent=mins?`Próxima revisão em ${mins<60?mins+' min':Math.round(mins/60)+' h'}.`:'Carregue um CSV para começar.';
-    showScreen('done');return;
-  }
-  showScreen('study');showCard();
+  document.getElementById('done-wrap').classList.remove('visible');
+  document.getElementById('study-area').style.display='flex';
+  document.getElementById('last-words-wrap').classList.remove('visible');
+  if(!sessionQueue.length){showDone(true);return;}
+  showCard();
 }
 
+function restartSession(){
+  document.getElementById('done-wrap').classList.remove('visible');
+  document.getElementById('study-area').style.display='flex';
+  startSession();
+}
+window.restartSession=restartSession;
+
 function showCard(){
-  if(sessionIdx>=sessionQueue.length){endSession();return;}
-  currentCard=sessionQueue[sessionIdx];revealed=false;
+  if(sessionIdx>=sessionQueue.length){showDone(false);return;}
+  currentCard=reviewCard||sessionQueue[sessionIdx];reviewCard=null;revealed=false;
   const bm={'en-pt':'EN → PT','es-pt':'ES → PT','zh-pt':'ZH → PT'};
   document.getElementById('card-front').textContent=currentCard.front;
   document.getElementById('card-original').textContent=currentCard.front;
@@ -715,51 +726,55 @@ function showCard(){
 }
 
 function showFront(){
+  revealed=false;
   document.getElementById('card-front-wrap').style.display='flex';
   document.getElementById('card-answer').classList.remove('visible');
   document.getElementById('rating-row').classList.remove('visible');
+  document.getElementById('last-words-wrap').classList.remove('visible');
   const sh=document.getElementById('swipe-hint');if(sh)sh.style.display='none';
 }
 
 function revealCard(){
-  revealed=true;
+  if(revealed)return;revealed=true;
   document.getElementById('card-front-wrap').style.display='none';
   document.getElementById('card-answer').classList.add('visible');
   document.getElementById('rating-row').classList.add('visible');
+  // show last words only on back
+  if(lastWords.length>0)document.getElementById('last-words-wrap').classList.add('visible');
   const sh=document.getElementById('swipe-hint');
   if(sh&&window.innerWidth<=600)sh.style.display='flex';
 }
 
-function toggleCard(){
-  // Toggle between front and back without advancing
-  if(!revealed){revealCard();}
-  else{showFront();revealed=false;}
-}
-
-function handleCardClick(){
-  if(!revealed){revealCard();}
-  // clicking back does nothing — use buttons or keys to rate
-}
+function handleCardClick(){if(!revealed)revealCard();}
+window.handleCardClick=handleCardClick;
 
 function rate(q){
   if(!revealed)return;
   updateSRS(currentCard.id,q);logStudied(currentCard.id);
-  if(q===2)sessionStats.easy++;else if(q===1)sessionStats.ok++;else{sessionStats.hard++;sessionQueue.push(currentCard);}
-  lastWords.unshift({front:currentCard.front,back:currentCard.back,q});
+  if(q===2)sessionStats.easy++;else if(q===1)sessionStats.ok++;else{sessionStats.hard++;if(!reviewCard)sessionQueue.push(currentCard);}
+  lastWords.unshift({front:currentCard.front,back:currentCard.back,phonetic:currentCard.phonetic||'',q,card:currentCard});
   if(lastWords.length>10)lastWords.pop();
-  renderLastWords();sessionIdx++;showCard();
+  if(!reviewCard)sessionIdx++;
+  renderLastWords();showCard();
 }
+window.rate=rate;
+
+function reviewLastWord(idx){
+  const w=lastWords[idx];if(!w)return;
+  reviewCard=w.card;showCard();
+}
+window.reviewLastWord=reviewLastWord;
 
 function renderLastWords(){
-  const wrap=document.getElementById('last-words-wrap');const list=document.getElementById('last-words-list');
-  if(!lastWords.length){wrap.style.display='none';return;}
-  wrap.style.display='block';
+  const list=document.getElementById('last-words-list');
   const dc=['dot-hard','dot-ok','dot-easy'];
-  list.innerHTML=lastWords.map(w=>`
-    <div class="last-word-item">
+  const labels=['😓 Difícil','🤔 Lembrei','✅ Fácil'];
+  list.innerHTML=lastWords.map((w,i)=>`
+    <div class="last-word-item" onclick="reviewLastWord(${i})">
       <span class="last-word-dot ${dc[w.q]}"></span>
       <span class="last-word-front">${w.front}</span>
-      <span class="last-word-back">${w.back}</span>
+      <span class="last-word-back">${w.back}${w.phonetic?' · '+w.phonetic:''}</span>
+      <span class="last-word-review">↩ rever</span>
     </div>`).join('');
 }
 
@@ -768,51 +783,60 @@ function copyWord(){
   navigator.clipboard.writeText(word).then(()=>{
     const btn=document.getElementById('copy-btn');btn.classList.add('copied');btn.textContent='✓';
     setTimeout(()=>{btn.classList.remove('copied');btn.textContent='⎘';},1500);
-  }).catch(()=>{toast('Não foi possível copiar');});
+  }).catch(()=>toast('Não foi possível copiar'));
+}
+window.copyWord=copyWord;
+
+// ══ DONE + INCENTIVE ══
+function showDone(allDone){
+  document.getElementById('study-area').style.display='none';
+  document.getElementById('done-wrap').classList.add('visible');
+  const easy=sessionStats.easy,ok=sessionStats.ok,hard=sessionStats.hard,total=easy+ok+hard;
+  document.getElementById('done-easy').textContent=easy;
+  document.getElementById('done-ok').textContent=ok;
+  document.getElementById('done-hard').textContent=hard;
+  updateHeaderStats();
+
+  let title,message,svg;
+
+  if(allDone){
+    title='Tudo em dia!';
+    const nd=allCards.map(c=>getSRSData(c.id).due).filter(d=>d>Date.now()).sort()[0];
+    const mins=nd?Math.round((nd-Date.now())/60000):null;
+    message=mins?`Próxima revisão em ${mins<60?mins+' min':Math.round(mins/60)+' h'}. Volte amanhã para manter o ritmo!`:'Carregue mais cards para continuar estudando.';
+    svg=svgMedal();
+  } else if(total>0&&hard/total<0.2){
+    title='Excelente!';
+    message='Você está dominando o vocabulário. Cada sessão te aproxima da fluência. Continue assim!';
+    svg=svgTrophy();
+  } else if(total>0&&easy/total>0.5){
+    title='Muito bem!';
+    message='Boa sessão. As palavras difíceis de hoje são as fáceis de amanhã. Você está no caminho certo!';
+    svg=svgStar();
+  } else {
+    title='Continue!';
+    message='Cada revisão fortalece sua memória. As palavras difíceis que você viu hoje vão voltar em breve — e você vai estar pronto!';
+    svg=svgRocket();
+  }
+
+  document.getElementById('done-title').textContent=title;
+  document.getElementById('done-message').textContent=message;
+  document.getElementById('done-illustration').innerHTML=svg;
 }
 
-function endSession(){
-  document.getElementById('progress-fill').style.width='100%';
-  document.getElementById('done-easy').textContent=sessionStats.easy;
-  document.getElementById('done-ok').textContent=sessionStats.ok;
-  document.getElementById('done-hard').textContent=sessionStats.hard;
-  document.getElementById('done-title').textContent='Sessão concluída!';
-  document.getElementById('done-sub').textContent='Ótimo trabalho. O sistema agendou sua próxima revisão automaticamente.';
-  updateHeaderStats();showScreen('done');
-}
+// SVG illustrations
+function svgTrophy(){return`<svg width="80" height="80" viewBox="0 0 80 80" style="margin:0 auto 0.5rem;display:block"><circle cx="40" cy="40" r="36" fill="var(--yellow-dim)" stroke="var(--yellow)" stroke-width="1.5"/><text x="40" y="52" text-anchor="middle" font-size="36">🏆</text></svg>`;}
+function svgStar(){return`<svg width="80" height="80" viewBox="0 0 80 80" style="margin:0 auto 0.5rem;display:block"><circle cx="40" cy="40" r="36" fill="var(--accent-dim)" stroke="var(--accent)" stroke-width="1.5"/><text x="40" y="52" text-anchor="middle" font-size="36">⭐</text></svg>`;}
+function svgRocket(){return`<svg width="80" height="80" viewBox="0 0 80 80" style="margin:0 auto 0.5rem;display:block"><circle cx="40" cy="40" r="36" fill="var(--blue-dim)" stroke="var(--blue)" stroke-width="1.5"/><text x="40" y="52" text-anchor="middle" font-size="36">🚀</text></svg>`;}
+function svgMedal(){return`<svg width="80" height="80" viewBox="0 0 80 80" style="margin:0 auto 0.5rem;display:block"><circle cx="40" cy="40" r="36" fill="var(--green-dim)" stroke="var(--green)" stroke-width="1.5"/><text x="40" y="52" text-anchor="middle" font-size="36">🎯</text></svg>`;}
 
-// NAVIGATION
-function updateCtxNav(screen){
-  const btns=document.querySelectorAll('.ctx-btn');
-  btns.forEach(b=>b.classList.remove('active'));
-  const map={welcome:0,library:1,stats:2,study:1,done:1,upload:1};
-  const idx=map[screen]??0;
-  if(btns[idx])btns[idx].classList.add('active');
-}
-
-function showScreen(n){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+n).classList.add('active');
-  updateCtxNav(n);
-  window.scrollTo(0,0);
-}
-function goWelcome(){showScreen('welcome');}
-function goLibrary(){renderLibrary();showScreen('library');}
-function goUpload(){showScreen('upload');}
-function goStats(){renderStats();showScreen('stats');}
-function selectLang(l,btn){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
-function updateHeaderStats(){
-  const due=allCards.filter(c=>isDue(c.id)).length;
-  document.getElementById('hdr-due').textContent=due;
-}
+// ══ UTILS ══
+function updateHeaderStats(){document.getElementById('hdr-due').textContent=allCards.filter(c=>isDue(c.id)).length;}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
+function selectLang(l,btn){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
+window.selectLang=selectLang;window.handleFile=handleFile;
 
-// GLOBALS
-window.goLibrary=goLibrary;window.goWelcome=goWelcome;window.goUpload=goUpload;window.goStats=goStats;
-window.runDemo=runDemo;window.startSession=startSession;window.revealCard=revealCard;
-window.handleCardClick=handleCardClick;window.rate=rate;window.selectLang=selectLang;window.handleFile=handleFile;window.copyWord=copyWord;
-
-// DRAG & DROP
+// ══ DRAG & DROP ══
 const ua=document.getElementById('upload-area');
 ua.addEventListener('dragover',e=>{e.preventDefault();ua.classList.add('dragover');});
 ua.addEventListener('dragleave',()=>ua.classList.remove('dragover'));
@@ -822,18 +846,14 @@ ua.addEventListener('drop',e=>{
   if(f&&f.name.endsWith('.csv')){
     const r=new FileReader();
     r.onload=ev=>{
-      const cards=parseCSV(ev.target.result,lang);
-      if(!cards.length){toast('Nenhum card encontrado');return;}
-      const name=f.name.replace(/\.[^/.]+$/,'');
-      addDeck(name,cards,lang);allCards=cards;activeDeckName=name;
-      localStorage.setItem('lp_active_deck',name);updateHeaderStats();
-      toast(`${cards.length} cards carregados!`);setTimeout(goLibrary,1500);
-    };
-    r.readAsText(f,'UTF-8');
+      const cards=parseCSV(ev.target.result,lang);if(!cards.length){toast('Nenhum card encontrado');return;}
+      const name=f.name.replace(/\.[^/.]+$/,'');addDeck(name,cards,lang);
+      updateHeaderStats();toast(`${cards.length} cards carregados!`);setTimeout(()=>{closeUpload();renderLibrary();},1500);
+    };r.readAsText(f,'UTF-8');
   }
 });
 
-// SWIPE
+// ══ SWIPE ══
 let tX=0,drag=false;
 const ce=document.getElementById('study-card');
 ce.addEventListener('touchstart',e=>{tX=e.touches[0].clientX;drag=false;},{passive:true});
@@ -844,49 +864,27 @@ ce.addEventListener('touchmove',e=>{
   ce.style.boxShadow=dx>40?'0 0 0 2px var(--green)':dx<-40?'0 0 0 2px var(--red)':'';
 },{passive:true});
 ce.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tX;
-  ce.style.transform='';ce.style.boxShadow='';
-  if(!revealed||!drag)return;
-  if(dx>80)rate(2);else if(dx<-80)rate(0);
-  drag=false;
+  const dx=e.changedTouches[0].clientX-tX;ce.style.transform='';ce.style.boxShadow='';
+  if(!revealed||!drag)return;if(dx>80)rate(2);else if(dx<-80)rate(0);drag=false;
 },{passive:true});
 
-// KEYBOARD — only left/right arrows, prevent scroll
+// ══ KEYBOARD ══
 document.addEventListener('keydown',e=>{
-  const inStudy=document.getElementById('screen-study').classList.contains('active');
-  if(!inStudy)return;
-
-  // Block all arrow key scrolling while in study mode
-  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)){
-    e.preventDefault();
-  }
-
-  if(!revealed){
-    // → or Space = reveal
-    if(e.code==='ArrowRight'||e.code==='Space'){revealCard();}
-    // ← = nothing (already on front)
-    return;
-  }
-
-  // revealed = true
-  if(e.code==='ArrowLeft'){
-    // Go back to front (toggle)
-    showFront();revealed=false;return;
-  }
+  const inStudy=document.getElementById('env-study').classList.contains('active');
+  if(!inStudy||document.getElementById('done-wrap').classList.contains('visible'))return;
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
+  if(!revealed){if(e.code==='ArrowRight'||e.code==='Space')revealCard();return;}
+  if(e.code==='ArrowLeft'){showFront();return;}
   if(e.code==='ArrowRight'||e.key==='3'){flashBtn('btn-easy');setTimeout(()=>rate(2),150);}
   if(e.key==='1'){flashBtn('btn-hard');setTimeout(()=>rate(0),150);}
   if(e.key==='2'){flashBtn('btn-ok');setTimeout(()=>rate(1),150);}
 });
+function flashBtn(id){const b=document.getElementById(id);if(!b)return;b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),300);}
 
-function flashBtn(id){
-  const btn=document.getElementById(id);if(!btn)return;
-  btn.classList.add('flash');setTimeout(()=>btn.classList.remove('flash'),300);
-}
-
-// INIT
+// ══ INIT ══
 const ad=localStorage.getItem('lp_active_deck');
 if(ad){const c=loadDeckCards(ad);if(c.length){allCards=c;activeDeckName=ad;const d=getDecks().find(x=>x.name===ad);if(d)lang=d.lang;}}
-updateHeaderStats();
+updateHeaderStats();renderLibrary();
 </script>
 </body>
 </html>
