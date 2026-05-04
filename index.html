@@ -23,7 +23,8 @@ header{padding:0.7rem 1.25rem;border-bottom:1px solid var(--border);display:flex
 .logo-version{font-family:'JetBrains Mono',monospace;font-size:0.56rem;color:var(--text-muted);background:var(--surface2);padding:0.12rem 0.35rem;border-radius:3px;border:1px solid var(--border)}
 
 /* NAV — 3 fixed tabs */
-.main-nav{display:flex;align-items:center;gap:0.35rem;flex:1;justify-content:center}
+.main-nav{display:flex;align-items:center;gap:0.35rem;flex:1;justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.main-nav::-webkit-scrollbar{display:none}
 .nav-btn{padding:0.32rem 0.9rem;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;display:flex;align-items:center;gap:0.3rem}
 .nav-btn:hover{border-color:var(--border2);color:var(--text)}
 .nav-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
@@ -362,7 +363,7 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
       <div class="welcome-card study" onclick="showEnv('study')" style="grid-column:1/-1">
         <div class="wcard-icon">⚡</div>
         <div class="wcard-title">Estudar agora</div>
-        <div class="wcard-desc">Abrir os flashcards e iniciar a revisão do deck selecionado</div>
+        <div class="wcard-desc" id="wcard-study-desc">Abrir os flashcards e iniciar a revisão</div>
         <div class="wcard-badge green" id="wcard-due-badge">0 para revisar hoje</div>
       </div>
 
@@ -600,10 +601,14 @@ function updateWelcomeBadges(){
   const db=document.getElementById('wcard-due-badge');
   const deckb=document.getElementById('wcard-deck-badge');
   const sb=document.getElementById('wcard-streak-badge');
+  const desc=document.getElementById('wcard-study-desc');
   if(db)db.textContent=due===0?'Tudo em dia ✓':due+' para revisar hoje';
   if(deckb)deckb.textContent=decks.length+' deck'+(decks.length!==1?'s':'');
   if(sb)sb.textContent=streak+' dia'+(streak!==1?'s':'')+' seguidos';
-  // mini auth
+  if(desc){
+    if(activeDeckName)desc.textContent='Deck ativo: '+activeDeckName;
+    else desc.textContent='Selecione um deck na Biblioteca para começar';
+  }
   renderWelcomeAuth();
 }
 
@@ -636,7 +641,7 @@ function initStudyEnv(){
   // Update label
   document.getElementById('deck-active-name').textContent=activeDeckName+(activeCategory?' · '+activeCategory:'');
   document.getElementById('deck-active-due').textContent=allCards.filter(c=>isDue(c.id)).length+' para revisar';
-  // Start session if not started or finished
+  // sessionQueue empty = fresh deck selected, always start new session
   if(!sessionQueue.length||sessionIdx>=sessionQueue.length){
     startSession();
   }
@@ -705,9 +710,11 @@ function getDueCount(cards){return cards.filter(c=>isDue(c.id)).length;}
 window.startDeck=function(name){
   const cards=loadDeckCards(name);const deck=getDecks().find(d=>d.name===name);
   if(!cards.length||!deck)return;
-  allCards=cards;lang=deck.lang;activeCategory='';activeDeckName=name;sessionIdx=0;
+  // Full reset when switching deck
+  allCards=cards;lang=deck.lang;activeCategory='';activeDeckName=name;
+  sessionIdx=0;sessionQueue=[];lastWords=[];sessionStats={easy:0,ok:0,hard:0};
   localStorage.setItem('lp_active_deck',name);
-  updateHeaderStats();
+  updateHeaderStats();updateWelcomeBadges();
   showEnv('study');
 };
 
@@ -721,15 +728,20 @@ window.selectCatFilter=function(deckName,cat,chip){
   activeDeckName=deckName;
   const deck=getDecks().find(d=>d.name===deckName);if(deck)lang=deck.lang;
   localStorage.setItem('lp_active_deck',deckName);
-  sessionIdx=0;updateHeaderStats();
+  // Reset session so new category takes effect
+  sessionIdx=0;sessionQueue=[];lastWords=[];sessionStats={easy:0,ok:0,hard:0};
+  updateHeaderStats();
   toast(activeCategory?`${allCards.length} cards de "${activeCategory}"`:'Todas as categorias');
 };
 
 window.removeDeckConfirm=function(name){
   if(!confirm(`Remover o deck "${name}"?\n\nApagará o deck e o progresso associado.`))return;
   let decks=getDecks().filter(d=>d.name!==name);saveDecks(decks);localStorage.removeItem('lp_cards_'+name);
-  if(activeDeckName===name){activeDeckName='';allCards=[];localStorage.removeItem('lp_active_deck');}
-  toast('Deck removido');renderLibrary();updateHeaderStats();
+  if(activeDeckName===name){
+    activeDeckName='';allCards=[];sessionQueue=[];sessionIdx=0;lastWords=[];
+    localStorage.removeItem('lp_active_deck');
+  }
+  toast('Deck removido');renderLibrary();updateHeaderStats();updateWelcomeBadges();
 };
 
 function esc(s){return String(s).replace(/'/g,"\\'");}
@@ -782,17 +794,24 @@ function getNextInterval(id,q){
 // ══ CSV ══
 function parseCSV(text,deckLang){
   const lines=text.trim().split('\n');const cards=[];let start=0;
+  // Validate it looks like a CSV with semicolons
+  const firstFew=lines.slice(0,5).join('\n');
+  if(!firstFew.includes(';')){return[];}
   const f=lines[0].toLowerCase();
   if(f.includes('english')||f.includes('id')||f.includes('vocab')||f.includes('español')||f.includes('espanhol')||f.includes('expression')||f.includes('mandarim')||f.includes('pinyin')){
     start=1;const s=lines[1]?lines[1].toLowerCase():'';
     if(s.includes('english')||s.includes('id')||s.includes('español')||s.includes('expression')||s.includes('mandarim')||s.includes('pinyin'))start=2;
   }
   for(let i=start;i<lines.length;i++){
+    if(cards.length>=2000)break; // safety limit
     const c=lines[i].split(';').map(x=>x.trim().replace(/^"|"$/g,''));if(c.length<3)continue;
     let id,front,back,cat,ph;
     if(!isNaN(c[0])&&c[0]!==''){id=c[0];front=c[1]||'';back=c[2]||'';cat=c[3]||'';ph=c[4]||'';}
     else{id=i.toString();front=c[0]||'';back=c[1]||'';cat=c[2]||'';ph=c[3]||'';}
     if(!front||!back)continue;
+    // Skip lines that look like binary/corrupted data
+    if(front.length>200||back.length>200)continue;
+    if(/[^\x20-\x7E\u00C0-\u024F\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\s]/.test(front))continue;
     cards.push({id:`${deckLang}_${id}`,front:front.trim(),back:back.trim(),category:cat.trim(),phonetic:ph.trim()});
   }
   return cards;
@@ -800,17 +819,35 @@ function parseCSV(text,deckLang){
 
 function handleFile(input){
   const file=input.files[0];if(!file)return;
+  // Validate file type
+  if(!file.name.toLowerCase().endsWith('.csv')){
+    toast('❌ Selecione um arquivo .CSV');
+    input.value='';return;
+  }
+  // Validate file size (max 5MB)
+  if(file.size>5*1024*1024){
+    toast('❌ Arquivo muito grande. Máximo 5MB.');
+    input.value='';return;
+  }
   const fn=document.getElementById('file-name');
+  fn.textContent='Lendo arquivo...';fn.style.display='inline-block';
   const reader=new FileReader();
   reader.onload=e=>{
     const cards=parseCSV(e.target.result,lang);
-    if(!cards.length){toast('Nenhum card encontrado.');return;}
+    if(!cards.length){
+      toast('❌ Arquivo inválido. Use CSV separado por ponto-e-vírgula (;)');
+      fn.style.display='none';input.value='';return;
+    }
     const name=file.name.replace(/\.[^/.]+$/,'');
     addDeck(name,cards,lang);
-    fn.textContent='✓ '+file.name;fn.style.display='inline-block';
+    fn.textContent='✓ '+file.name;
     input.value='';updateHeaderStats();
-    toast(`${cards.length} cards adicionados!`);
-    setTimeout(()=>{fn.style.display='none';closeUpload();renderLibrary();},1500);
+    toast(`✓ ${cards.length} cards adicionados!`);
+    setTimeout(()=>{fn.style.display='none';closeUpload();renderLibrary();updateWelcomeBadges();},1500);
+  };
+  reader.onerror=()=>{
+    toast('❌ Erro ao ler o arquivo.');
+    fn.style.display='none';input.value='';
   };
   reader.readAsText(file,'UTF-8');
 }
@@ -983,14 +1020,17 @@ ua.addEventListener('dragleave',()=>ua.classList.remove('dragover'));
 ua.addEventListener('drop',e=>{
   e.preventDefault();ua.classList.remove('dragover');
   const f=e.dataTransfer.files[0];
-  if(f&&f.name.endsWith('.csv')){
-    const r=new FileReader();
-    r.onload=ev=>{
-      const cards=parseCSV(ev.target.result,lang);if(!cards.length){toast('Nenhum card encontrado');return;}
-      const name=f.name.replace(/\.[^/.]+$/,'');addDeck(name,cards,lang);
-      updateHeaderStats();toast(`${cards.length} cards carregados!`);setTimeout(()=>{closeUpload();renderLibrary();},1500);
-    };r.readAsText(f,'UTF-8');
-  }
+  if(!f){return;}
+  if(!f.name.toLowerCase().endsWith('.csv')){toast('❌ Selecione um arquivo .CSV');return;}
+  const r=new FileReader();
+  r.onload=ev=>{
+    const cards=parseCSV(ev.target.result,lang);
+    if(!cards.length){toast('❌ Arquivo inválido. Use CSV separado por ;');return;}
+    const name=f.name.replace(/\.[^/.]+$/,'');addDeck(name,cards,lang);
+    updateHeaderStats();toast(`✓ ${cards.length} cards carregados!`);
+    setTimeout(()=>{closeUpload();renderLibrary();updateWelcomeBadges();},1500);
+  };
+  r.readAsText(f,'UTF-8');
 });
 
 // ══ SWIPE ══
@@ -1026,6 +1066,7 @@ const ad=localStorage.getItem('lp_active_deck');
 if(ad){const c=loadDeckCards(ad);if(c.length){allCards=c;activeDeckName=ad;const d=getDecks().find(x=>x.name===ad);if(d)lang=d.lang;}}
 updateHeaderStats();
 renderLibrary();
+updateWelcomeBadges();
 // Always show welcome on load
 showEnv('welcome');
 </script>
