@@ -227,6 +227,71 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:0.6rem 1rem;font-size:0.76rem;color:var(--text-dim);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:999;white-space:nowrap;font-family:'JetBrains Mono',monospace}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
+/* ══ WELCOME SCREEN ══ */
+#env-welcome{min-height:calc(100vh - 53px);justify-content:center;padding:2rem 1.25rem;position:relative;overflow:hidden}
+.welcome-bg-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 70%,rgba(61,255,192,0.07) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 85% 20%,rgba(96,165,250,0.05) 0%,transparent 50%),radial-gradient(ellipse 40% 35% at 50% 100%,rgba(245,200,66,0.04) 0%,transparent 50%);pointer-events:none}
+.welcome-inner{max-width:480px;width:100%;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0;text-align:center}
+
+/* Logo hero */
+.welcome-logo{font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5rem);font-weight:900;color:var(--accent);letter-spacing:-0.04em;line-height:1;margin-bottom:0.3rem}
+.welcome-tagline{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.18em;color:var(--text-muted);text-transform:uppercase;margin-bottom:1.75rem}
+
+/* Divider line */
+.welcome-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:1.75rem}
+
+/* Action cards grid */
+.welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;width:100%;margin-bottom:1rem}
+.welcome-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem 1rem 1.25rem;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:0.6rem;position:relative;overflow:hidden}
+.welcome-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.2s;pointer-events:none}
+.welcome-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,0.4)}
+.welcome-card:active{transform:scale(0.97)}
+
+.welcome-card.study::before{background:radial-gradient(ellipse at top,rgba(61,255,192,0.08) 0%,transparent 60%)}
+.welcome-card.study{border-color:var(--border2)}
+.welcome-card.study:hover{border-color:var(--accent)}
+.welcome-card.study:hover::before{opacity:1}
+
+.welcome-card.library::before{background:radial-gradient(ellipse at top,rgba(96,165,250,0.08) 0%,transparent 60%)}
+.welcome-card.library:hover{border-color:var(--blue)}
+.welcome-card.library:hover::before{opacity:1}
+
+.welcome-card.metrics::before{background:radial-gradient(ellipse at top,rgba(245,200,66,0.08) 0%,transparent 60%)}
+.welcome-card.metrics:hover{border-color:var(--yellow)}
+.welcome-card.metrics:hover::before{opacity:1}
+
+.welcome-card.add::before{background:radial-gradient(ellipse at top,rgba(240,112,112,0.08) 0%,transparent 60%)}
+.welcome-card.add:hover{border-color:var(--red)}
+.welcome-card.add:hover::before{opacity:1}
+
+.wcard-icon{font-size:2.2rem;line-height:1}
+.wcard-title{font-size:0.95rem;font-weight:700;letter-spacing:-0.01em}
+.wcard-desc{font-size:0.7rem;color:var(--text-muted);line-height:1.45;text-align:center}
+.wcard-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.15rem 0.5rem;border-radius:99px;margin-top:0.1rem}
+.wcard-badge.green{background:var(--green-dim);color:var(--green);border:1px solid rgba(90,242,146,0.2)}
+.wcard-badge.blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(96,165,250,0.2)}
+.wcard-badge.yellow{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(245,200,66,0.2)}
+.wcard-badge.red{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,112,112,0.2)}
+
+/* sync row */
+.welcome-sync{width:100%;display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.15s}
+.welcome-sync:hover{border-color:var(--border2)}
+.welcome-sync-text{font-size:0.78rem;color:var(--text-muted)}
+.welcome-sync-text strong{color:var(--text-dim)}
+
+/* version footer */
+.welcome-version{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--text-muted);margin-top:1.25rem;opacity:0.6}
+
+/* Mobile welcome */
+@media(max-width:600px){
+  #env-welcome{padding:1.5rem 1rem}
+  .welcome-logo{font-size:3.5rem}
+  .welcome-grid{gap:0.6rem}
+  .welcome-card{padding:1.25rem 0.75rem 1rem}
+  .wcard-icon{font-size:2rem}
+  .wcard-title{font-size:0.88rem}
+  .wcard-desc{font-size:0.68rem}
+}
+
 /* ══ MOBILE ══ */
 @media(max-width:600px){
   header{padding:0.65rem 0.85rem;gap:0.4rem}
@@ -263,13 +328,14 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 <body>
 
 <header>
-  <div style="display:flex;align-items:baseline;gap:0.45rem;cursor:pointer" onclick="showEnv('library')">
+  <div style="display:flex;align-items:baseline;gap:0.45rem;cursor:pointer" onclick="showEnv('welcome')">
     <div class="logo">LexiPro</div>
-    <div class="logo-version">v4.0</div>
+    <div class="logo-version">v4.1</div>
   </div>
 
   <nav class="main-nav">
-    <button class="nav-btn active" id="nav-library" onclick="showEnv('library')">📚 Biblioteca</button>
+    <button class="nav-btn" id="nav-welcome" onclick="showEnv('welcome')">🏠 Início</button>
+    <button class="nav-btn" id="nav-library" onclick="showEnv('library')">📚 Biblioteca</button>
     <button class="nav-btn" id="nav-stats" onclick="showEnv('stats')">📊 Métricas</button>
     <button class="nav-btn" id="nav-study" onclick="showEnv('study')">⚡ Flashcard</button>
   </nav>
@@ -281,6 +347,53 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 </header>
 
 <main>
+
+<!-- ══ ENV 0 — WELCOME ══ -->
+<div class="env active" id="env-welcome">
+  <div class="welcome-bg-glow"></div>
+  <div class="welcome-inner">
+
+    <div class="welcome-logo">LexiPro</div>
+    <div class="welcome-tagline">seu flashcard pessoal</div>
+    <div class="welcome-divider"></div>
+
+    <div class="welcome-grid">
+      <!-- Estudar -->
+      <div class="welcome-card study" onclick="showEnv('study')" style="grid-column:1/-1">
+        <div class="wcard-icon">⚡</div>
+        <div class="wcard-title">Estudar agora</div>
+        <div class="wcard-desc">Abrir os flashcards e iniciar a revisão do deck selecionado</div>
+        <div class="wcard-badge green" id="wcard-due-badge">0 para revisar hoje</div>
+      </div>
+
+      <!-- Biblioteca -->
+      <div class="welcome-card library" onclick="showEnv('library')">
+        <div class="wcard-icon">📚</div>
+        <div class="wcard-title">Biblioteca</div>
+        <div class="wcard-desc">Gerenciar decks e adicionar novos arquivos CSV</div>
+        <div class="wcard-badge blue" id="wcard-deck-badge">0 decks</div>
+      </div>
+
+      <!-- Métricas -->
+      <div class="welcome-card metrics" onclick="showEnv('stats')">
+        <div class="wcard-icon">📊</div>
+        <div class="wcard-title">Métricas</div>
+        <div class="wcard-desc">Ver evolução histórica e progresso por idioma</div>
+        <div class="wcard-badge yellow" id="wcard-streak-badge">0 dias seguidos</div>
+      </div>
+    </div>
+
+    <!-- Sync row -->
+    <div class="welcome-sync" id="welcome-sync-row">
+      <span style="font-size:1.1rem">☁️</span>
+      <div class="welcome-sync-text"><strong>Sincronizar progresso</strong> — salvar em todos os dispositivos</div>
+      <div id="welcome-auth-mini"></div>
+    </div>
+
+    <div class="welcome-version">LexiPro v4.1 · Claude (Anthropic) &amp; Serlyo D'Oliveira — 2026</div>
+
+  </div>
+</div>
 
 <!-- ══ ENV 1 — BIBLIOTECA ══ -->
 <div class="env active" id="env-library">
@@ -327,7 +440,7 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
   </div>
 
   <!-- Study area -->
-  <div id="study-area" style="display:none;width:100%;display:flex;flex-direction:column;align-items:center;gap:0.85rem">
+  <div id="study-area" style="display:none;width:100%;flex-direction:column;align-items:center;gap:0.85rem">
 
     <div class="deck-active-label" id="deck-active-label">
       <span id="deck-active-name">—</span>
@@ -429,7 +542,7 @@ footer{border-top:1px solid var(--border);padding:0.75rem 1.5rem;text-align:cent
 </div>
 
 <footer>
-  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v4.0</div>
+  <div class="footer-credit">Desenvolvido por <span>Claude</span> (Anthropic) &amp; <span>Serlyo D'Oliveira</span> — 2026 · LexiPro v4.1</div>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -472,32 +585,59 @@ function showEnv(name){
   document.querySelectorAll('.env').forEach(e=>e.classList.remove('active'));
   document.getElementById('env-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('nav-'+name).classList.add('active');
+  const navBtn=document.getElementById('nav-'+name);
+  if(navBtn)navBtn.classList.add('active');
   window.scrollTo(0,0);
   if(name==='stats')renderStats();
   if(name==='library')renderLibrary();
   if(name==='study')initStudyEnv();
+  if(name==='welcome')updateWelcomeBadges();
 }
+function updateWelcomeBadges(){
+  const due=allCards.filter(c=>isDue(c.id)).length;
+  const decks=getDecks();
+  const{streak}=computeStats();
+  const db=document.getElementById('wcard-due-badge');
+  const deckb=document.getElementById('wcard-deck-badge');
+  const sb=document.getElementById('wcard-streak-badge');
+  if(db)db.textContent=due===0?'Tudo em dia ✓':due+' para revisar hoje';
+  if(deckb)deckb.textContent=decks.length+' deck'+(decks.length!==1?'s':'');
+  if(sb)sb.textContent=streak+' dia'+(streak!==1?'s':'')+' seguidos';
+  // mini auth
+  renderWelcomeAuth();
+}
+
+function renderWelcomeAuth(){
+  const mini=document.getElementById('welcome-auth-mini');
+  if(!mini)return;
+  if(currentUser){
+    mini.innerHTML=`<img src="${currentUser.photoURL}" style="width:22px;height:22px;border-radius:50%;border:1px solid var(--border2)">`;
+  }else{
+    mini.innerHTML=`<button onclick="document.getElementById('btn-si')?.click()" style="font-size:0.65rem;padding:0.2rem 0.5rem;border:1px solid var(--accent);border-radius:6px;background:transparent;color:var(--accent);cursor:pointer;font-family:'Syne',sans-serif;font-weight:600">Entrar</button>`;
+  }
+}
+
 window.showEnv=showEnv;
+window.updateWelcomeBadges=updateWelcomeBadges;
 
 function initStudyEnv(){
+  const noDeck=document.getElementById('no-deck-msg');
+  const area=document.getElementById('study-area');
+  const done=document.getElementById('done-wrap');
   if(!activeDeckName||!allCards.length){
-    document.getElementById('no-deck-msg').style.display='block';
-    document.getElementById('study-area').style.display='none';
-    document.getElementById('done-wrap').classList.remove('visible');
+    noDeck.style.display='block';
+    area.style.display='none';
+    done.classList.remove('visible');
     return;
   }
-  document.getElementById('no-deck-msg').style.display='none';
-  document.getElementById('study-area').style.display='flex';
-  document.getElementById('done-wrap').classList.remove('visible');
+  noDeck.style.display='none';
+  done.classList.remove('visible');
+  area.style.display='flex';
   // Update label
-  const lbl=document.getElementById('deck-active-label');
-  if(lbl){
-    document.getElementById('deck-active-name').textContent=activeDeckName+(activeCategory?' · '+activeCategory:'');
-    document.getElementById('deck-active-due').textContent=allCards.filter(c=>isDue(c.id)).length+' para revisar';
-  }
-  // If session not started yet or done, start fresh
-  if(sessionIdx===0||sessionIdx>=sessionQueue.length){
+  document.getElementById('deck-active-name').textContent=activeDeckName+(activeCategory?' · '+activeCategory:'');
+  document.getElementById('deck-active-due').textContent=allCards.filter(c=>isDue(c.id)).length+' para revisar';
+  // Start session if not started or finished
+  if(!sessionQueue.length||sessionIdx>=sessionQueue.length){
     startSession();
   }
 }
@@ -687,8 +827,8 @@ function startSession(){
   sessionStats={easy:0,ok:0,hard:0};lastWords=[];
   sessionQueue=buildQueue();sessionIdx=0;
   document.getElementById('done-wrap').classList.remove('visible');
-  document.getElementById('study-area').style.display='flex';
   document.getElementById('last-words-wrap').classList.remove('visible');
+  document.getElementById('study-area').style.display='flex';
   if(!sessionQueue.length){showDone(true);return;}
   showCard();
 }
@@ -884,7 +1024,10 @@ function flashBtn(id){const b=document.getElementById(id);if(!b)return;b.classLi
 // ══ INIT ══
 const ad=localStorage.getItem('lp_active_deck');
 if(ad){const c=loadDeckCards(ad);if(c.length){allCards=c;activeDeckName=ad;const d=getDecks().find(x=>x.name===ad);if(d)lang=d.lang;}}
-updateHeaderStats();renderLibrary();
+updateHeaderStats();
+renderLibrary();
+// Always show welcome on load
+showEnv('welcome');
 </script>
 </body>
 </html>
